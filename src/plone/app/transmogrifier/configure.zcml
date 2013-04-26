@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     i18n_domain="plone.app.transmogrifier">
 
 <utility
@@ -55,6 +56,14 @@
 <utility
     component=".versioning.EnableVersioningSection"
     name="plone.app.transmogrifier.versioning.enable"
+    />
+
+<transmogrifier:registerConfig
+    name="plone.app.transmogrifier.xmlwalker"
+    title="Web Site Importer"
+    description="Import a web site by crawling it's links and
+                 extracting field and other values."
+    configuration="xmlwalker.cfg"
     />
 
 </configure>
