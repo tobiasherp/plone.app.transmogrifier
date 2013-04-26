@@ -7,5 +7,4 @@ bin/
 develop-eggs/
 eggs/
 parts/
-src/
 var/
