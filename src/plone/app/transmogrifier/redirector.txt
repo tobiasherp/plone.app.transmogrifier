@@ -33,18 +33,18 @@ and update paths in keys.
     ... [old-paths]
     ... blueprint = collective.transmogrifier.sections.inserter
     ... key = string:_old_paths
-    ... condition = python:item['idx'] > 0
-    ... value = python:'\\n'.join([\
+    ... condition = python:item['idx'] < 2
+    ... value = python:[\
     ...     names[item['idx']] + '/' + item['id'] for names in (
     ...         ['corge', 'grault', 'garply'],
-    ...         ['waldo', 'fred', 'plugh'])])
+    ...         ['waldo', 'fred', 'plugh'])]
     ... 
     ... [remoteUrl]
     ... blueprint = collective.transmogrifier.sections.inserter
     ... key = string:remoteUrl
-    ... condition = python:item['idx'] < 2
-    ... value = python:['corge', 'grault', 'garply'][item['idx']]\
-    ...     + '/' + item['id']
+    ... condition = python:item['idx'] > 0
+    ... value = python:['corge', 'grault', 'garply'][item['idx'] - 1]\
+    ...     + '/' + 'item-%02d' % (item['idx'] - 1)
     ... 
     ... [redirect]
     ... blueprint = plone.app.transmogrifier.redirector
@@ -60,21 +60,21 @@ and update paths in keys.
     >>> transmogrifier(u'plone.app.transmogrifier.tests.redirector')
     >>> print handler
     logger INFO
-        {'_path': 'foo/item-00',
+        {'_old_paths': ['corge/item-00', 'waldo/item-00'],
+       '_path': 'foo/item-00',
        'id': 'item-00',
-       'idx': 0,
-       'remoteUrl': 'corge/item-00'}
+       'idx': 0}
     logger INFO
-        {'_old_paths': 'grault/item-01\nfred/item-01',
+        {'_old_paths': ['grault/item-01', 'fred/item-01'],
        '_path': 'bar/item-01',
        'id': 'item-01',
        'idx': 1,
-       'remoteUrl': 'bar/item-01'}
+       'remoteUrl': 'foo/item-00'}
     logger INFO
-        {'_old_paths': 'garply/item-02\nplugh/item-02',
-       '_path': 'qux/item-02',
+        {'_path': 'qux/item-02',
        'id': 'item-02',
-       'idx': 2}
+       'idx': 2,
+       'remoteUrl': 'grault/item-01'}
 
     >>> import pprint
     >>> from zope.component import getUtility
@@ -82,6 +82,4 @@ and update paths in keys.
     >>> storage = getUtility(IRedirectionStorage)
     >>> pprint.pprint([storage.redirects(path) for path in (
     ...     'foo/item-00', 'bar/item-01', 'qux/item-02')])
-    [[],
-     ['fred/item-01', 'grault/item-01'],
-     ['garply/item-02', 'plugh/item-02']]
+    [['corge/item-00', 'waldo/item-00'], [], []]
