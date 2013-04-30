@@ -58,6 +58,11 @@
     name="plone.app.transmogrifier.versioning.enable"
     />
 
+<utility
+    component=".redirector.RedirectorSection"
+    name="plone.app.transmogrifier.redirector"
+    />
+
 <transmogrifier:registerConfig
     name="plone.app.transmogrifier.xmlwalker"
     title="Web Site Importer"

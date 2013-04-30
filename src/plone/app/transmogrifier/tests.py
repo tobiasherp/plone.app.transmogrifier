@@ -454,6 +454,15 @@ def reindexObjectSetup(test):
     provideUtility(ReindexObjectSource,
         name=u'plone.app.transmogrifier.tests.reindexobjectsource')
 
+
+def redirectorSetUp(test):
+    sectionsSetUp(test)
+    from plone.app.redirector import storage
+    from plone.app.redirector import interfaces
+    provideUtility(storage.RedirectionStorage(),
+                   provides=interfaces.IRedirectionStorage)
+
+
 def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
@@ -482,4 +491,8 @@ def test_suite():
         doctest.DocFileSuite(
             'reindexobject.txt',
             setUp=reindexObjectSetup, tearDown=tearDown),
+        doctest.DocFileSuite(
+            'redirector.txt',
+            optionflags=doctest.NORMALIZE_WHITESPACE | doctest.REPORT_NDIFF,
+            setUp=redirectorSetUp, tearDown=tearDown),
     ))
