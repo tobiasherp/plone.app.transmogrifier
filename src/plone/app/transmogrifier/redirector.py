@@ -27,7 +27,8 @@ class RedirectorSection(object):
             transmogrifier, name, options)
 
         self.updatepathkeys = Matcher(
-            *options.get('update-path-keys', "remoteUrl").splitlines())
+            *options.get('update-path-keys',
+                         "['remoteUrl', 'relatedItems']").splitlines())
 
     def __iter__(self):
         storage = queryUtility(IRedirectionStorage)
