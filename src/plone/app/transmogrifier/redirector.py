@@ -50,7 +50,8 @@ class RedirectorSection(object):
             if pathkey:
                 path = item[pathkey]
                 for old_path in old_paths:
-                    storage.add(old_path, path)
+                    if old_path != path:
+                        storage.add(old_path, path)
 
             for key in keys:
                 if not self.updatepathkeys(key)[1]:
