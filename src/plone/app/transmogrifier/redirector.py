@@ -7,7 +7,7 @@ from plone.app.redirector.interfaces import IRedirectionStorage
 
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
-from collective.transmogrifier.utils import defaultMatcher, Matcher, Expression
+from collective.transmogrifier.utils import defaultMatcher, Matcher, Condition
 
 
 class RedirectorSection(object):
@@ -18,17 +18,18 @@ class RedirectorSection(object):
         self.previous = previous
         self.logger = logging.getLogger(name)
 
-        self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
-        self.oldpathskey = Expression(
-            options.get(
-                'old-paths-key',
-                'python:"remoteUrl" not in item '
-                'and "_is_defaultpage" not in item and "_old_paths"'),
-            transmogrifier, name, options)
+        self.condition = Condition(options.get(
+            'condition',
+            'python:"remoteUrl" not in item and "_is_defaultpage" not in item'
+            ), transmogrifier, name, options)
 
-        self.updatepathkeys = Matcher(
-            *options.get('update-path-keys',
-                         "['remoteUrl', 'relatedItems']").splitlines())
+        self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
+        self.oldpathskey = defaultMatcher(
+            options, 'old-paths-key', name, 'old_paths')
+
+        self.updatepathkeys = Matcher(*options.get(
+            'update-path-keys',
+            "remoteUrl\nrelatedItems").splitlines())
 
     def __iter__(self):
         storage = queryUtility(IRedirectionStorage)
@@ -39,13 +40,14 @@ class RedirectorSection(object):
                 yield item
                 continue
 
+            keys = item.keys()
+
             old_paths = set()
-            oldpathskey = self.oldpathskey(item)
+            oldpathskey = self.oldpathskey(*keys)[0]
             if oldpathskey and oldpathskey in item:
                 old_paths.update(old_path.strip() for old_path in
                                  item[oldpathskey] if old_path.strip())
 
-            keys = item.keys()
             pathkey = self.pathkey(*keys)[0]
             if pathkey:
                 path = item[pathkey]

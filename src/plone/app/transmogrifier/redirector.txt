@@ -74,7 +74,7 @@ and update paths in keys.
         {'_path': 'qux/item-02',
        'id': 'item-02',
        'idx': 2,
-       'remoteUrl': 'grault/item-01'}
+       'remoteUrl': 'bar/item-01'}
 
     >>> import pprint
     >>> from zope.component import getUtility
@@ -82,4 +82,4 @@ and update paths in keys.
     >>> storage = getUtility(IRedirectionStorage)
     >>> pprint.pprint([storage.redirects(path) for path in (
     ...     'foo/item-00', 'bar/item-01', 'qux/item-02')])
-    [['corge/item-00', 'waldo/item-00'], [], []]
+    [['corge/item-00', 'waldo/item-00'], ['fred/item-01', 'grault/item-01'], []]
