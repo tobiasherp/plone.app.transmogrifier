@@ -45,8 +45,10 @@ class RedirectorSection(object):
             old_paths = set()
             oldpathskey = self.oldpathskey(*keys)[0]
             if oldpathskey and oldpathskey in item:
-                old_paths.update(old_path.strip() for old_path in
-                                 item[oldpathskey] if old_path.strip())
+                paths = item[oldpathskey]
+                if isinstance(paths, (str, unicode)):
+                    paths = [paths]
+                old_paths.update(paths)
 
             pathkey = self.pathkey(*keys)[0]
             if pathkey:
