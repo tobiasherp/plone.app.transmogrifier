@@ -10,7 +10,9 @@ and update paths in keys.
     ... pipeline =
     ...     source
     ...     old-paths
+    ...     content-element
     ...     redirect
+    ...     href
     ...     logger
     ... 
     ... [source]
@@ -23,11 +25,22 @@ and update paths in keys.
     ... condition = exists:item/_old_paths
     ... value = python:item['_old_paths'].split(':')
     ... 
+    ... [content-element]
     ... blueprint = collective.transmogrifier.sections.inserter
+    ... key = string:_content_element
+    ... condition = item/remoteUrl
+    ... value = python:modules['xml.etree.ElementTree'].Element(\
+    ...     'a', dict(href=item['remoteUrl']))
     ... 
     ... [redirect]
     ... blueprint = plone.app.transmogrifier.redirector
-    ...
+    ... 
+    ... [href]
+    ... blueprint = collective.transmogrifier.sections.inserter
+    ... key = string:_content_element
+    ... condition = exists:item/_content_element
+    ... value = python:item['_content_element'].attrib['href']
+    ... 
     ... [logger]
     ... blueprint = collective.transmogrifier.sections.logger
     ... name = logger
@@ -49,13 +62,15 @@ and update paths in keys.
        '_path': 'foo/bar',
        'remoteUrl': ''}
     logger INFO
-        {'_old_paths': ['corge/grault/item-01', 'waldo/fred/item-01'],
+        {'_content_element': 'foo/item-00',
+       '_old_paths': ['corge/grault/item-01', 'waldo/fred/item-01'],
        '_path': 'foo/bar/item-01',
        'remoteUrl': 'foo/item-00'}
     logger INFO
       {'_old_paths': [''], '_path': 'foo/bar/qux', 'remoteUrl': ''}
     logger INFO
-        {'_old_paths': [''],
+        {'_content_element': 'foo/bar/item-01',
+       '_old_paths': [''],
        '_path': 'foo/bar/qux/item-02',
        'remoteUrl': 'foo/bar/item-01'}
 

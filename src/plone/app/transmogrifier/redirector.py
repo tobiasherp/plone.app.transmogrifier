@@ -1,4 +1,12 @@
+import posixpath
 import logging
+
+from xml.etree.ElementTree import Element
+try:
+    from lxml.etree import ElementBase
+except ImportError:
+    ElementBase  # pyflakes
+    ElementBase = Element
 
 from zope.interface import classProvides, implements
 from zope.component import queryUtility
@@ -29,7 +37,10 @@ class RedirectorSection(object):
 
         self.updatepathkeys = Matcher(*options.get(
             'update-path-keys',
-            "remoteUrl\nrelatedItems").splitlines())
+            "_content_element\nremoteUrl\nrelatedItems").splitlines())
+
+        self.elementattribs = options.get('element-attributes',
+                                          ('href', 'src'))
 
     def __iter__(self):
         storage = queryUtility(IRedirectionStorage)
@@ -64,16 +75,32 @@ class RedirectorSection(object):
 
                 multiple = True
                 paths = item[key]
-                if isinstance(paths, basestring):
+                if not isinstance(paths, (tuple, list)):
                     multiple = False
                     paths = [paths]
 
                 for idx, obj in enumerate(paths):
+                    path = obj
+                    is_element = isinstance(obj, (Element, ElementBase))
+                    if is_element:
+                        for attrib in self.elementattribs:
+                            if attrib in obj.attrib:
+                                path = obj.attrib[attrib]
+                                break
+                        else:
+                            # No attribute in this element
+                            continue
+
                     path = str(path).lstrip('/')
+
                     new_path = old_path = ''
                     for elem in pathsplit(path):
                         old_path = posixpath.join(old_path, elem)
                         new_path = storage.get(old_path, new_path)
+
+                    if is_element:
+                        obj.attrib[attrib] = new_path
+                        new_path = obj
                     paths[idx] = new_path
 
                 if not multiple:
