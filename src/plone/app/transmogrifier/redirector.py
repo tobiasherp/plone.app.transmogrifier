@@ -54,8 +54,9 @@ class RedirectorSection(object):
             if pathkey:
                 path = item[pathkey]
                 for old_path in old_paths:
-                    if old_path != path:
-                        storage.add(old_path, path)
+                    if old_path and old_path != path:
+                        storage.add(str(old_path).lstrip('/'),
+                                    str(path).lstrip('/'))
 
             for key in keys:
                 if not self.updatepathkeys(key)[1]:
@@ -68,6 +69,7 @@ class RedirectorSection(object):
                     paths = [paths]
 
                 for idx, obj in enumerate(paths):
+                    path = str(path).lstrip('/')
                     new_path = old_path = ''
                     for elem in pathsplit(path):
                         old_path = posixpath.join(old_path, elem)
