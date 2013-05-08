@@ -9,42 +9,21 @@ and update paths in keys.
     ... [transmogrifier]
     ... pipeline =
     ...     source
-    ...     idx
-    ...     path
     ...     old-paths
-    ...     remoteUrl
     ...     redirect
     ...     logger
     ... 
     ... [source]
-    ... blueprint = collective.transmogrifier.sections.tests.rangesource
-    ... size = 3
-    ... 
-    ... [idx]
-    ... blueprint = collective.transmogrifier.sections.inserter
-    ... key = string:idx
-    ... value = python:int(item['id'].rsplit('-', 1)[-1])
-    ... 
-    ... [path]
-    ... blueprint = collective.transmogrifier.sections.inserter
-    ... key = string:_path
-    ... value = python:['foo', 'bar', 'qux'][item['idx']] + '/' + item['id']
+    ... blueprint = collective.transmogrifier.sections.csvsource
+    ... filename = plone.app.transmogrifier:redirector.csv
     ... 
     ... [old-paths]
     ... blueprint = collective.transmogrifier.sections.inserter
     ... key = string:_old_paths
-    ... condition = python:item['idx'] < 2
-    ... value = python:[\
-    ...     names[item['idx']] + '/' + item['id'] for names in (
-    ...         ['corge', 'grault', 'garply'],
-    ...         ['waldo', 'fred', 'plugh'])]
+    ... condition = exists:item/_old_paths
+    ... value = python:item['_old_paths'].split(':')
     ... 
-    ... [remoteUrl]
     ... blueprint = collective.transmogrifier.sections.inserter
-    ... key = string:remoteUrl
-    ... condition = python:item['idx'] > 0
-    ... value = python:['corge', 'grault', 'garply'][item['idx'] - 1]\
-    ...     + '/' + 'item-%02d' % (item['idx'] - 1)
     ... 
     ... [redirect]
     ... blueprint = plone.app.transmogrifier.redirector
@@ -60,26 +39,37 @@ and update paths in keys.
     >>> transmogrifier(u'plone.app.transmogrifier.tests.redirector')
     >>> print handler
     logger INFO
+      {'_old_paths': ['corge', 'waldo'], '_path': 'foo', 'remoteUrl': ''}
+    logger INFO
         {'_old_paths': ['corge/item-00', 'waldo/item-00'],
        '_path': 'foo/item-00',
-       'id': 'item-00',
-       'idx': 0}
+       'remoteUrl': ''}
     logger INFO
-        {'_old_paths': ['grault/item-01', 'fred/item-01'],
-       '_path': 'bar/item-01',
-       'id': 'item-01',
-       'idx': 1,
+        {'_old_paths': ['corge/grault', 'waldo/fred'],
+       '_path': 'foo/bar',
+       'remoteUrl': ''}
+    logger INFO
+        {'_old_paths': ['corge/grault/item-01', 'waldo/fred/item-01'],
+       '_path': 'foo/bar/item-01',
        'remoteUrl': 'foo/item-00'}
     logger INFO
-        {'_path': 'qux/item-02',
-       'id': 'item-02',
-       'idx': 2,
-       'remoteUrl': 'bar/item-01'}
+      {'_old_paths': [''], '_path': 'foo/bar/qux', 'remoteUrl': ''}
+    logger INFO
+        {'_old_paths': [''],
+       '_path': 'foo/bar/qux/item-02',
+       'remoteUrl': 'foo/bar/item-01'}
 
     >>> import pprint
     >>> from zope.component import getUtility
     >>> from plone.app.redirector.interfaces import IRedirectionStorage
     >>> storage = getUtility(IRedirectionStorage)
     >>> pprint.pprint([storage.redirects(path) for path in (
-    ...     'foo/item-00', 'bar/item-01', 'qux/item-02')])
-    [['corge/item-00', 'waldo/item-00'], ['fred/item-01', 'grault/item-01'], []]
+    ...     'foo', 'foo/item-00',
+    ...     'foo/bar', 'foo/bar/item-01',
+    ...     'foo/bar/qux', 'foo/bar/qux/item-02')])
+    [['corge', 'waldo'],
+     ['corge/item-00', 'waldo/item-00'],
+     ['corge/grault', 'waldo/fred'],
+     ['corge/grault/item-01', 'waldo/fred/item-01'],
+     [],
+     []]

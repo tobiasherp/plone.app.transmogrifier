@@ -65,13 +65,23 @@ class RedirectorSection(object):
                     multiple = False
                     paths = [paths]
 
-                for idx, path in enumerate(paths):
-                    new_path = storage.get(path)
-                    if new_path is not None:
-                        paths[idx] = new_path
+                for idx, obj in enumerate(paths):
+                    new_path = old_path = ''
+                    for elem in pathsplit(path):
+                        old_path = posixpath.join(old_path, elem)
+                        new_path = storage.get(old_path, new_path)
+                    paths[idx] = new_path
 
                 if not multiple:
                     paths = paths[0]
                 item[key] = paths
 
             yield item
+
+
+def pathsplit(path):
+    if path:
+        dirname, basename = posixpath.split(path)
+        for elem in pathsplit(dirname):
+            yield elem
+        yield basename
