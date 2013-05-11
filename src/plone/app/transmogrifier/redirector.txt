@@ -67,12 +67,12 @@ and update paths in keys.
        '_path': 'foo/bar/item-01',
        'remoteUrl': 'foo/item-00'}
     logger INFO
-      {'_old_paths': [''], '_path': 'foo/bar/qux', 'remoteUrl': ''}
+      {'_old_paths': [''], '_path': '/foo/bar/qux/', 'remoteUrl': ''}
     logger INFO
-        {'_content_element': 'foo/bar/item-01',
+        {'_content_element': '/foo/bar/item-01',
        '_old_paths': [''],
-       '_path': 'foo/bar/qux/item-02',
-       'remoteUrl': 'foo/bar/item-01'}
+       '_path': '/foo/bar/qux/item-02',
+       'remoteUrl': '/foo/bar/item-01'}
 
     >>> import pprint
     >>> from zope.component import getUtility

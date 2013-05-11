@@ -91,13 +91,15 @@ class RedirectorSection(object):
                             # No attribute in this element
                             continue
 
-                    path = str(path).lstrip('/')
-
+                    path = str(path)
+                    stripped = path.lstrip('/')
+                    leading = path[:-len(stripped)]
                     new_path = old_path = ''
-                    for elem in pathsplit(path):
+                    for elem in pathsplit(stripped):
                         old_path = posixpath.join(old_path, elem)
                         new_path = posixpath.join(new_path, elem)
                         new_path = storage.get(old_path, new_path)
+                    new_path = leading + new_path
 
                     if is_element:
                         obj.attrib[attrib] = new_path
@@ -114,6 +116,9 @@ class RedirectorSection(object):
 def pathsplit(path):
     if path:
         dirname, basename = posixpath.split(path)
-        for elem in pathsplit(dirname):
-            yield elem
-        yield basename
+        if dirname == posixpath.sep:
+            yield dirname
+        else:
+            for elem in pathsplit(dirname):
+                yield elem
+            yield basename
