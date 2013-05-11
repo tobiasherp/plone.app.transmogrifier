@@ -96,6 +96,7 @@ class RedirectorSection(object):
                     new_path = old_path = ''
                     for elem in pathsplit(path):
                         old_path = posixpath.join(old_path, elem)
+                        new_path = posixpath.join(new_path, elem)
                         new_path = storage.get(old_path, new_path)
 
                     if is_element:

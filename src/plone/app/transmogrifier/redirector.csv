@@ -1,0 +1,7 @@
+_path,_old_paths,remoteUrl
+foo,corge:waldo,
+foo/item-00,corge/item-00:waldo/item-00,
+foo/bar,corge/grault:waldo/fred,
+foo/bar/item-01,corge/grault/item-01:waldo/fred/item-01,corge/item-00
+/foo/bar/qux/,,
+/foo/bar/qux/item-02,,/corge/grault/item-01
