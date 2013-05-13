@@ -24,6 +24,8 @@ class RedirectorSection(object):
 
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
+        self.context_path = '/'.join(
+            transmogrifier.context.getPhysicalPath()) + '/'
         self.logger = logging.getLogger(name)
 
         self.condition = Condition(options.get(
@@ -66,8 +68,9 @@ class RedirectorSection(object):
                 path = item[pathkey]
                 for old_path in old_paths:
                     if old_path and old_path != path:
-                        storage.add(str(old_path).lstrip('/'),
-                                    str(path).lstrip('/'))
+                        storage.add(
+                            self.context_path + str(old_path).lstrip('/'),
+                            self.context_path + str(path).lstrip('/'))
 
             for key in keys:
                 if not self.updatepathkeys(key)[1]:
@@ -94,12 +97,12 @@ class RedirectorSection(object):
                     path = str(path)
                     stripped = path.lstrip('/')
                     leading = path[:-len(stripped)]
-                    new_path = old_path = ''
+                    new_path = old_path = self.context_path
                     for elem in pathsplit(stripped):
                         old_path = posixpath.join(old_path, elem)
                         new_path = posixpath.join(new_path, elem)
                         new_path = storage.get(old_path, new_path)
-                    new_path = leading + new_path
+                    new_path = leading + new_path[len(self.context_path):]
 
                     if is_element:
                         obj.attrib[attrib] = new_path

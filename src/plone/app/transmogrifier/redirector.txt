@@ -79,12 +79,12 @@ and update paths in keys.
     >>> from plone.app.redirector.interfaces import IRedirectionStorage
     >>> storage = getUtility(IRedirectionStorage)
     >>> pprint.pprint([storage.redirects(path) for path in (
-    ...     'foo', 'foo/item-00',
-    ...     'foo/bar', 'foo/bar/item-01',
-    ...     'foo/bar/qux', 'foo/bar/qux/item-02')])
-    [['corge', 'waldo'],
-     ['corge/item-00', 'waldo/item-00'],
-     ['corge/grault', 'waldo/fred'],
-     ['corge/grault/item-01', 'waldo/fred/item-01'],
+    ...     '/plone/foo', '/plone/foo/item-00',
+    ...     '/plone/foo/bar', '/plone/foo/bar/item-01',
+    ...     '/plone/foo/bar/qux', '/plone/foo/bar/qux/item-02')])
+    [['/plone/corge', '/plone/waldo'],
+     ['/plone/corge/item-00', '/plone/waldo/item-00'],
+     ['/plone/corge/grault', '/plone/waldo/fred'],
+     ['/plone/corge/grault/item-01', '/plone/waldo/fred/item-01'],
      [],
      []]
