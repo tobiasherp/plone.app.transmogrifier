@@ -15,7 +15,7 @@ from plone.app.redirector.interfaces import IRedirectionStorage
 
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
-from collective.transmogrifier.utils import defaultMatcher, Matcher, Condition
+from collective.transmogrifier.utils import defaultKeys, defaultMatcher
 
 
 class RedirectorSection(object):
@@ -27,11 +27,6 @@ class RedirectorSection(object):
         self.context_path = '/'.join(
             transmogrifier.context.getPhysicalPath()) + '/'
         self.logger = logging.getLogger(name)
-
-        self.condition = Condition(options.get(
-            'condition',
-            'python:"remoteUrl" not in item and "_is_defaultpage" not in item'
-            ), transmogrifier, name, options)
 
         self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
         self.oldpathskey = defaultMatcher(
