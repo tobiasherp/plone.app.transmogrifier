@@ -54,6 +54,8 @@ and update paths in keys.
     logger INFO
       {'_old_paths': ['corge', 'waldo'], '_redirect_path': 'foo', 'remoteUrl': ''}
     logger INFO
+      {'_old_paths': [''], '_redirect_path': 'foo', 'remoteUrl': ''}
+    logger INFO
         {'_old_paths': ['corge/item-00', 'waldo/item-00'],
        '_redirect_path': 'foo/item-00',
        'remoteUrl': ''}

@@ -32,9 +32,10 @@ class RedirectorSection(object):
         self.oldpathskey = defaultMatcher(
             options, 'old-paths-key', name, 'old_paths')
 
-        self.updatepathkeys = Matcher(*options.get(
-            'update-path-keys',
-            "_content_element\nremoteUrl\nrelatedItems").splitlines())
+        self.updatepathkeys = defaultMatcher(
+            options, 'update-path-keys', name, 'update_path',
+            extra=(('_content_element', 'remoteUrl', 'relatedItems') +
+                   defaultKeys(options['blueprint'], name, 'path')))
 
         self.elementattribs = options.get('element-attributes',
                                           ('href', 'src'))
@@ -50,22 +51,13 @@ class RedirectorSection(object):
 
             keys = item.keys()
 
-            old_paths = set()
-            oldpathskey = self.oldpathskey(*keys)[0]
-            if oldpathskey and oldpathskey in item:
-                paths = item[oldpathskey]
-                if isinstance(paths, (str, unicode)):
-                    paths = [paths]
-                old_paths.update(paths)
+            # Update paths first
 
-            pathkey = self.pathkey(*keys)[0]
-            if pathkey:
-                path = item[pathkey]
-                for old_path in old_paths:
-                    if old_path and old_path != path:
-                        storage.add(
-                            self.context_path + str(old_path).lstrip('/'),
-                            self.context_path + str(path).lstrip('/'))
+            # If a redirect already exists for _path, it should be
+            # updated first so that any new redirects for _old_paths
+            # point to the correct _path and it's unlikely that any
+            # keys in this item will contain any _old_paths for the
+            # same item
 
             for key in keys:
                 if not self.updatepathkeys(key)[1]:
@@ -107,6 +99,25 @@ class RedirectorSection(object):
                 if not multiple:
                     paths = paths[0]
                 item[key] = paths
+
+            # Collect old paths
+            old_paths = set()
+            oldpathskey = self.oldpathskey(*keys)[0]
+            if oldpathskey and oldpathskey in item:
+                paths = item[oldpathskey]
+                if isinstance(paths, (str, unicode)):
+                    paths = [paths]
+                old_paths.update(paths)
+
+            pathkey = self.pathkey(*keys)[0]
+            if pathkey:
+                path = item[pathkey]
+                # Add any new redirects
+                for old_path in old_paths:
+                    if old_path and old_path != path:
+                        storage.add(
+                            self.context_path + str(old_path).lstrip('/'),
+                            self.context_path + str(path).lstrip('/'))
 
             yield item
 
