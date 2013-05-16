@@ -98,6 +98,7 @@ class RedirectorSection(object):
 
                 if not multiple:
                     paths = paths[0]
+                self.logger.debug('Updating path(s) in %r: %s', key, paths)
                 item[key] = paths
 
             # Collect old paths
@@ -115,6 +116,8 @@ class RedirectorSection(object):
                 # Add any new redirects
                 for old_path in old_paths:
                     if old_path and old_path != path:
+                        self.logger.debug(
+                            'Adding redirect for %r: %s', pathkey, old_path)
                         storage.add(
                             self.context_path + str(old_path).lstrip('/'),
                             self.context_path + str(path).lstrip('/'))
