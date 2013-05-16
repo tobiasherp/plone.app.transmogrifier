@@ -1,4 +1,4 @@
-_path,_old_paths,remoteUrl
+_redirect_path,_old_paths,remoteUrl
 foo,corge:waldo,
 foo/item-00,corge/item-00:waldo/item-00,
 foo/bar,corge/grault:waldo/fred,
