@@ -17,6 +17,7 @@ from plone.app.redirector.interfaces import IRedirectionStorage
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import defaultKeys, defaultMatcher
+from collective.transmogrifier.utils import pathsplit
 
 
 class RedirectorSection(object):
@@ -134,14 +135,3 @@ class RedirectorSection(object):
     def _is_external(self, path):
         return urlparse.urlsplit(path).netloc and not path.startswith(
             self.context_url)
-
-
-def pathsplit(path):
-    if path:
-        dirname, basename = posixpath.split(path)
-        if dirname == posixpath.sep:
-            yield dirname
-        else:
-            for elem in pathsplit(dirname):
-                yield elem
-            yield basename
