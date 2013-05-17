@@ -23,7 +23,7 @@ and update paths in keys.
     ... blueprint = collective.transmogrifier.sections.inserter
     ... key = string:_old_paths
     ... condition = exists:item/_old_paths
-    ... value = python:item['_old_paths'].split(':')
+    ... value = python:item['_old_paths'].split('|')
     ... 
     ... [content-element]
     ... blueprint = collective.transmogrifier.sections.inserter
@@ -66,15 +66,15 @@ and update paths in keys.
     logger INFO
         {'_content_element': 'foo/item-00',
        '_old_paths': ['corge/grault/item-01', 'waldo/fred/item-01'],
-       '_redirect_path': 'foo/bar/item-01',
+       '_redirect_path': 'http://nohost/foo/bar/item-01',
        'remoteUrl': 'foo/item-00'}
     logger INFO
       {'_old_paths': [''], '_redirect_path': '/foo/bar/qux/', 'remoteUrl': ''}
     logger INFO
-        {'_content_element': '/foo/bar/item-01',
+        {'_content_element': 'http://nohost/foo/bar/item-01',
        '_old_paths': [''],
        '_redirect_path': '/foo/bar/qux/item-02',
-       'remoteUrl': '/foo/bar/item-01'}
+       'remoteUrl': 'http://nohost/foo/bar/item-01'}
 
     >>> import pprint
     >>> from zope.component import getUtility
@@ -83,10 +83,12 @@ and update paths in keys.
     >>> pprint.pprint([storage.redirects(path) for path in (
     ...     '/plone/foo', '/plone/foo/item-00',
     ...     '/plone/foo/bar', '/plone/foo/bar/item-01',
+    ...     'http://nohost/foo/bar/item-01',
     ...     '/plone/foo/bar/qux', '/plone/foo/bar/qux/item-02')])
     [['/plone/corge', '/plone/waldo'],
      ['/plone/corge/item-00', '/plone/waldo/item-00'],
      ['/plone/corge/grault', '/plone/waldo/fred'],
+     [],
      ['/plone/corge/grault/item-01', '/plone/waldo/fred/item-01'],
      [],
      []]

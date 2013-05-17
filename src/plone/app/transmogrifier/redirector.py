@@ -1,4 +1,5 @@
 import posixpath
+import urlparse
 import logging
 
 from xml.etree.ElementTree import Element
@@ -26,6 +27,7 @@ class RedirectorSection(object):
         self.previous = previous
         self.context_path = '/'.join(
             transmogrifier.context.getPhysicalPath()) + '/'
+        self.context_url = transmogrifier.context.absolute_url()
         self.logger = logging.getLogger(name)
 
         self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
@@ -81,6 +83,9 @@ class RedirectorSection(object):
                             # No attribute in this element
                             continue
 
+                    if self._is_external(path):
+                        continue
+
                     path = str(path)
                     stripped = path.lstrip('/')
                     leading = path[:-len(stripped)]
@@ -89,7 +94,8 @@ class RedirectorSection(object):
                         old_path = posixpath.join(old_path, elem)
                         new_path = posixpath.join(new_path, elem)
                         new_path = storage.get(old_path, new_path)
-                    new_path = leading + new_path[len(self.context_path):]
+                    if not urlparse.urlsplit(new_path).netloc:
+                        new_path = leading + new_path[len(self.context_path):]
 
                     if is_element:
                         obj.attrib[attrib] = new_path
@@ -120,9 +126,14 @@ class RedirectorSection(object):
                             'Adding redirect for %r: %s', pathkey, old_path)
                         storage.add(
                             self.context_path + str(old_path).lstrip('/'),
+                            (self._is_external(path) and path) or
                             self.context_path + str(path).lstrip('/'))
 
             yield item
+
+    def _is_external(self, path):
+        return urlparse.urlsplit(path).netloc and not path.startswith(
+            self.context_url)
 
 
 def pathsplit(path):
