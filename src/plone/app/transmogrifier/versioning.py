@@ -3,8 +3,6 @@ from zope.annotation.interfaces import IAnnotations
 
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
-from collective.transmogrifier.utils import Matcher
-from collective.transmogrifier.utils import defaultKeys
 
 from Products.CMFCore.utils import getToolByName
 
