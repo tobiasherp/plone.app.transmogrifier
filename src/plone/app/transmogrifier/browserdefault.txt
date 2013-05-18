@@ -54,25 +54,34 @@ id of the layout to use for the content item.
     ... blueprint = plone.app.transmogrifier.browserdefault
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.browserdefault',
     ...                browserdefault)
     >>> transmogrifier(u'plone.app.transmogrifier.tests.browserdefault')
-    [('_layout', 'spam'), ('_path', '/spam/eggs/foo')]
-    [('_defaultpage', 'eggs'), ('_path', '/spam/eggs/bar')]
-    [('_defaultpage', 'eggs'), ('_layout', 'spam'), ('_path', '/spam/eggs/baz')]
-    [('_layout', 'spam'),
-     ('_path', 'not/existing/bar'),
-     ('title', 'Should not be updated, not an existing path')]
-    [('_path', 'spam/eggs/incomplete'),
-     ('title', 'Should not be updated, no layout or defaultpage')]
-    [('_layout', ''),
-     ('_path', 'spam/eggs/emptylayout'),
-     ('title', 'Should not be updated, no layout or defaultpage')]
-    [('_defaultpage', ''),
-     ('_path', 'spam/eggs/emptydefaultpage'),
-     ('title', 'Should not be updated, no layout or defaultpage')]
+    >>> print(handler)
+    logger INFO
+      {'_layout': 'spam', '_path': '/spam/eggs/foo'}
+    logger INFO
+      {'_defaultpage': 'eggs', '_path': '/spam/eggs/bar'}
+    logger INFO
+      {'_defaultpage': 'eggs', '_layout': 'spam', '_path': '/spam/eggs/baz'}
+    logger INFO
+        {'_layout': 'spam',
+       '_path': 'not/existing/bar',
+       'title': 'Should not be updated, not an existing path'}
+    logger INFO
+        {'_path': 'spam/eggs/incomplete',
+       'title': 'Should not be updated, no layout or defaultpage'}
+    logger INFO
+        {'_layout': '',
+       '_path': 'spam/eggs/emptylayout',
+       'title': 'Should not be updated, no layout or defaultpage'}
+    logger INFO
+        {'_defaultpage': '',
+       '_path': 'spam/eggs/emptydefaultpage',
+       'title': 'Should not be updated, no layout or defaultpage'}
     >>> pprint.pprint(plone.updated)
     (('spam/eggs/foo', 'layout', 'spam'),
      ('spam/eggs/bar', 'defaultpage', 'eggs'),

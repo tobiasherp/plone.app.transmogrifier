@@ -51,21 +51,26 @@ happening. The condition is evaluated for every matched key.
     ... keys = status
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.ptransforms',
     ...                ptransforms)
+
     >>> transmogrifier(u'plone.app.transmogrifier.tests.ptransforms')
-    [('id', "Transformed 'foo' using the identity transform"),
-     ('status', "Transformed '\\xe2\\x84\\x97' from text/plain to text/plain"),
-     ('title', "Transformed 'The Foo Fighters \\xe2\\x84\\x97' to text/plain")]
-    [('id', "Transformed 'bar' using the identity transform"),
-     ('status', "Transformed '\\xe2\\x84\\xa2' from text/plain to text/plain"),
-     ('title', "Transformed 'Brand Chocolate Bar \\xe2\\x84\\xa2' to text/plain")]
-    [('id', "Transformed 'monty-python' using the identity transform"),
-     ('status', "Transformed '\\xc2\\xa9' from text/plain to text/plain"),
-     ('title',
-      'Transformed "Monty Python\'s Flying Circus \\xc2\\xa9" to text/plain')]
+    >>> print handler
+    logger INFO
+        {'id': "Transformed 'foo' using the identity transform",
+       'status': "Transformed '\\xe2\\x84\\x97' from text/plain to text/plain",
+       'title': "Transformed 'The Foo Fighters \\xe2\\x84\\x97' to text/plain"}
+    logger INFO
+        {'id': "Transformed 'bar' using the identity transform",
+       'status': "Transformed '\\xe2\\x84\\xa2' from text/plain to text/plain",
+       'title': "Transformed 'Brand Chocolate Bar \\xe2\\x84\\xa2' to text/plain"}
+    logger INFO
+        {'id': "Transformed 'monty-python' using the identity transform",
+       'status': "Transformed '\\xc2\\xa9' from text/plain to text/plain",
+       'title': 'Transformed "Monty Python\'s Flying Circus \\xc2\\xa9" to text/plain'}
 
 The ``condition`` expression has access to the following:
 

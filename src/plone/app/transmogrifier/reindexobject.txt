@@ -43,18 +43,25 @@ Paths to objects are always interpreted as relative to the context.
     ... blueprint = plone.app.transmogrifier.reindexobject
     ...
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.reindexobject', reindexobject)
 
     >>> transmogrifier(u'plone.app.transmogrifier.tests.reindexobject')
-    [('_path', '/spam/eggs/foo')]
-    [('_path', '/spam/eggs/bar')]
-    [('_path', '/spam/eggs/baz')]
-    [('_path', 'not/a/catalog/aware/content'),
-     ('title', 'Should not be reindexed, not a CMFCatalogAware content')]
-    [('_path', 'not/existing/bar'),
-     ('title', 'Should not be reindexed, not an existing path')]
+    >>> print(handler)
+    logger INFO
+      {'_path': '/spam/eggs/foo'}
+    logger INFO
+      {'_path': '/spam/eggs/bar'}
+    logger INFO
+      {'_path': '/spam/eggs/baz'}
+    logger INFO
+        {'_path': 'not/a/catalog/aware/content',
+       'title': 'Should not be reindexed, not a CMFCatalogAware content'}
+    logger INFO
+        {'_path': 'not/existing/bar',
+       'title': 'Should not be reindexed, not an existing path'}
 
     >>> pprint.pprint(plone.reindexed)
     (('spam/eggs/foo', 'reindexed'),

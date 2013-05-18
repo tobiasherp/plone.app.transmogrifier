@@ -27,21 +27,29 @@ The URL normalizer accepts the following optional keys -
     ... locale = string:en
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.urlnormalizer',
     ...                urlnormalizer)
     >>> transmogrifier(u'plone.app.transmogrifier.tests.urlnormalizer')
-    [('id', 'mytitle'), ('title', 'mytitle')]
-    [('id', 'is-this-a-title-of-any-sort'),
-     ('title', 'Is this a title of any sort?')]
-    [('id', 'put-some-br-1lly-v4lues-here-there'),
-     ('title', 'Put some <br /> $1llY V4LUES -- here&there')]
-    [('id', 'what-about-\r\n-line-breaks-system'),
-     ('title', 'What about \r\n line breaks (system)')]
-    [('id', 'try-one-of-these-oh'), ('title', 'Try one of these --------- oh')]
-    [('language', 'My language is de')]
-    [('language', 'my language is en')]
+    >>> print(handler)
+    logger INFO
+      {'id': 'mytitle', 'title': 'mytitle'}
+    logger INFO
+      {'id': 'is-this-a-title-of-any-sort', 'title': 'Is this a title of any sort?'}
+    logger INFO
+        {'id': 'put-some-br-1lly-v4lues-here-there',
+       'title': 'Put some <br /> $1llY V4LUES -- here&there'}
+    logger INFO
+        {'id': 'what-about-line-breaks-system',
+       'title': 'What about \r\n line breaks (system)'}
+    logger INFO
+      {'id': 'try-one-of-these-oh', 'title': 'Try one of these --------- oh'}
+    logger INFO
+      {'language': 'My language is de'}
+    logger INFO
+      {'language': 'my language is en'}
 
 As you can see, only items containing the specified source-key have been processed, the others have been ignored and yielded without change.
 
@@ -65,18 +73,29 @@ Destination-key and locale accept TALES expressions, so for example you could se
     ... destination-key = ${urlnormalizer:locale}
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.urlnormalizer2',
     ...                urlnormalizer)
+
+    >>> handler.clear()
     >>> transmogrifier(u'plone.app.transmogrifier.tests.urlnormalizer2')
-    [('title', 'mytitle')]
-    [('title', 'Is this a title of any sort?')]
-    [('title', 'Put some <br /> $1llY V4LUES -- here&there')]
-    [('title', 'What about \r\n line breaks (system)')]
-    [('title', 'Try one of these --------- oh')]
-    [('de', 'my-language-is-de'), ('language', 'My language is de')]
-    [('en', 'my-language-is-en'), ('language', 'my language is en')]
+    >>> print(handler)
+    logger INFO
+      {'title': 'mytitle'}
+    logger INFO
+      {'title': 'Is this a title of any sort?'}
+    logger INFO
+      {'title': 'Put some <br /> $1llY V4LUES -- here&there'}
+    logger INFO
+      {'title': 'What about \r\n line breaks (system)'}
+    logger INFO
+      {'title': 'Try one of these --------- oh'}
+    logger INFO
+      {'de': 'my-language-is-de', 'language': 'My language is de'}
+    logger INFO
+      {'en': 'my-language-is-en', 'language': 'my language is en'}
 
 In this case only items containing the 'language' key have been processed, and the destination-key has been set to the same value as the locale was. This is more to illuminate the fact that the locale was set, rather than providing a sensible use-case for destination-key.
 
@@ -100,21 +119,31 @@ If ZERO options are specified, the normalizer falls back to a set of default val
     ... blueprint = plone.app.transmogrifier.urlnormalizer
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.urlnormalizer3',
     ...                urlnormalizer)
+
+    >>> handler.clear()
     >>> transmogrifier(u'plone.app.transmogrifier.tests.urlnormalizer3')
-    [('_id', 'mytitle'), ('title', 'mytitle')]
-    [('_id', 'is-this-a-title-of-any-sort'),
-     ('title', 'Is this a title of any sort?')]
-    [('_id', 'put-some-br-1lly-v4lues-here-there'),
-     ('title', 'Put some <br /> $1llY V4LUES -- here&there')]
-    [('_id', 'what-about-\r\n-line-breaks-system'),
-     ('title', 'What about \r\n line breaks (system)')]
-    [('_id', 'try-one-of-these-oh'), ('title', 'Try one of these --------- oh')]
-    [('language', 'My language is de')]
-    [('language', 'my language is en')]
+    >>> print(handler)
+    logger INFO
+      {'_id': 'mytitle', 'title': 'mytitle'}
+    logger INFO
+      {'_id': 'is-this-a-title-of-any-sort', 'title': 'Is this a title of any sort?'}
+    logger INFO
+        {'_id': 'put-some-br-1lly-v4lues-here-there',
+       'title': 'Put some <br /> $1llY V4LUES -- here&there'}
+    logger INFO
+        {'_id': 'what-about-line-breaks-system',
+       'title': 'What about \r\n line breaks (system)'}
+    logger INFO
+      {'_id': 'try-one-of-these-oh', 'title': 'Try one of these --------- oh'}
+    logger INFO
+      {'language': 'My language is de'}
+    logger INFO
+      {'language': 'my language is en'}
 
 In this case, the destination-key is set to a controller variable, like _path, as it is expected that the newly formed Id will in most cases be used further down the pipeline in constructing the full, final path to the new Plone object.
 

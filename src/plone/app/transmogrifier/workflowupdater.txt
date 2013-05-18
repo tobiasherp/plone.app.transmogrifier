@@ -50,21 +50,28 @@ executed in order, failing transitions are silently ignored.
     ... blueprint = plone.app.transmogrifier.workflowupdater
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.workflow',
     ...                workflow)
     >>> transmogrifier(u'plone.app.transmogrifier.tests.workflow')
-    [('_path', '/spam/eggs/foo'), ('_transitions', 'spam')]
-    [('_path', '/spam/eggs/baz'), ('_transitions', ('spam', 'eggs'))]
-    [('_path', 'not/existing/bar'),
-     ('_transitions', ('spam', 'eggs')),
-     ('title', 'Should not be updated, not an existing path')]
-    [('_path', 'spam/eggs/incomplete'),
-     ('title', 'Should not be updated, no transitions')]
-    [('_path', '/spam/eggs/nosuchtransition'),
-     ('_transitions', ('nonsuch',)),
-     ('title', 'Should not be updated, no such transition')]
+    >>> print(handler)
+    logger INFO
+      {'_path': '/spam/eggs/foo', '_transitions': 'spam'}
+    logger INFO
+      {'_path': '/spam/eggs/baz', '_transitions': ('spam', 'eggs')}
+    logger INFO
+        {'_path': 'not/existing/bar',
+       '_transitions': ('spam', 'eggs'),
+       'title': 'Should not be updated, not an existing path'}
+    logger INFO
+        {'_path': 'spam/eggs/incomplete',
+       'title': 'Should not be updated, no transitions'}
+    logger INFO
+        {'_path': '/spam/eggs/nosuchtransition',
+       '_transitions': ('nonsuch',),
+       'title': 'Should not be updated, no such transition'}
     >>> pprint.pprint(plone.updated)
     (('spam/eggs/foo', 'spam'),
      ('spam/eggs/baz', 'spam'),

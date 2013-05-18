@@ -10,6 +10,8 @@ from Products.Five import zcml
 
 # Doctest support
 
+optionflags = doctest.REPORT_NDIFF
+
 ctSectionsSetup = sectionsSetUp
 def sectionsSetUp(test):
     ctSectionsSetup(test)
@@ -467,29 +469,39 @@ def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
             'portaltransforms.txt',
+            optionflags=optionflags,
             setUp=portalTransformsSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
             'atschemaupdater.txt',
+            optionflags=optionflags,
             setUp=aTSchemaUpdaterSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
             'uidupdater.txt',
+            optionflags=optionflags,
             setUp=uidSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
             'workflowupdater.txt',
+            optionflags=optionflags,
             setUp=workflowUpdaterSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
             'browserdefault.txt',
+            optionflags=optionflags,
             setUp=browserDefaultSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
             'urlnormalizer.txt',
+            optionflags=optionflags,
             setUp=urlNormalizerSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'criteria.txt', setUp=criteriaSetUp, tearDown=tearDown),
+            'criteria.txt',
+            optionflags=optionflags,
+            setUp=criteriaSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
             'mimeencapsulator.txt',
+            optionflags=optionflags,
             setUp=mimeencapsulatorSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
             'reindexobject.txt',
+            optionflags=optionflags,
             setUp=reindexObjectSetup, tearDown=tearDown),
         doctest.DocFileSuite(
             'redirector.txt',

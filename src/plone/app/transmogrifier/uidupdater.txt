@@ -64,16 +64,24 @@ items with two keys: a path under ``_path`` and a UID string under ``_uid``.
     ... blueprint = plone.app.transmogrifier.uidupdater
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.uid', atschema)
     >>> transmogrifier(u'plone.app.transmogrifier.tests.uid')
-    [('_path', '/spam/eggs/foo'), ('_uid', 'abc')]
-    [('_path', '/spam/eggs/bar'), ('_uid', 'xyz')]
-    [('_path', 'not/existing/bar'), ('_uid', 'def')]
-    [('_uid', 'geh')]
-    [('_path', '/spam/eggs/baz')]
-    [('_path', '/spam/notatcontent'), ('_uid', 'ijk')]
+    >>> print(handler)
+    logger INFO
+      {'_path': '/spam/eggs/foo', '_uid': 'abc'}
+    logger INFO
+      {'_path': '/spam/eggs/bar', '_uid': 'xyz'}
+    logger INFO
+      {'_path': 'not/existing/bar', '_uid': 'def'}
+    logger INFO
+      {'_uid': 'geh'}
+    logger INFO
+      {'_path': '/spam/eggs/baz'}
+    logger INFO
+      {'_path': '/spam/notatcontent', '_uid': 'ijk'}
     
     >>> pprint.pprint(plone.uids_set)
     [('spam/eggs/foo', 'abc')]

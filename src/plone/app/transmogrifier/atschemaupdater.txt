@@ -44,23 +44,30 @@ the corresponding value, using the field's mutator.
     ... blueprint = plone.app.transmogrifier.atschemaupdater
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.atschema', atschema)
+
     >>> transmogrifier(u'plone.app.transmogrifier.tests.atschema')
-    [('_path', '/spam/eggs/foo'),
-     ('fieldnotchanged', 'nochange'),
-     ('fieldone', 'one value'),
-     ('fieldtwo', 2),
-     ('fieldunicode', u'\xe5'),
-     ('nosuchfield', 'ignored')]
-    [('_path', 'not/existing/bar'),
-     ('fieldone', 'one value'),
-     ('title', 'Should not be updated, not an existing path')]
-    [('fieldone', 'one value'), ('title', 'Should not be updated, no path')]
-    [('_path', '/spam/eggs/notatcontent'),
-     ('fieldtwo', 2),
-     ('title', 'Should not be updated, not an AT base object')]
+    >>> print handler
+    logger INFO
+        {'_path': '/spam/eggs/foo',
+       'fieldnotchanged': 'nochange',
+       'fieldone': 'one value',
+       'fieldtwo': 2,
+       'fieldunicode': u'\xe5',
+       'nosuchfield': 'ignored'}
+    logger INFO
+        {'_path': 'not/existing/bar',
+       'fieldone': 'one value',
+       'title': 'Should not be updated, not an existing path'}
+    logger INFO
+      {'fieldone': 'one value', 'title': 'Should not be updated, no path'}
+    logger INFO
+        {'_path': '/spam/eggs/notatcontent',
+       'fieldtwo': 2,
+       'title': 'Should not be updated, not an AT base object'}
     >>> pprint.pprint(plone.updated)
     (('spam/eggs/foo', 'fieldone', 'one value-by-mutator'),
      ('spam/eggs/foo', 'fieldtwo', 2))

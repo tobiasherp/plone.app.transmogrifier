@@ -43,18 +43,21 @@ resolve to IATTopic classes.
     ... blueprint = plone.app.transmogrifier.criterionadder
     ... 
     ... [printer]
-    ... blueprint = collective.transmogrifier.sections.tests.pprinter
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.criteria', criteria)
     >>> transmogrifier(u'plone.app.transmogrifier.tests.criteria')
-    [('_criterion', 'bar'),
-     ('_field', 'baz'),
-     ('_path', '/spam/eggs/foo/crit__baz_bar')]
-    [('_criterion', 'bar'),
-     ('_field', 'baz'),
-     ('_path', 'not/existing/bar'),
-     ('title', 'Should not be updated, not an existing path')]
-    [('_path', 'spam/eggs/incomplete'),
-     ('title', 'Should not be updated, no criterion or field')]
+    >>> print(handler)
+    logger INFO
+      {'_criterion': 'bar', '_field': 'baz', '_path': '/spam/eggs/foo/crit__baz_bar'}
+    logger INFO
+        {'_criterion': 'bar',
+       '_field': 'baz',
+       '_path': 'not/existing/bar',
+       'title': 'Should not be updated, not an existing path'}
+    logger INFO
+        {'_path': 'spam/eggs/incomplete',
+       'title': 'Should not be updated, no criterion or field'}
     >>> pprint.pprint(plone.criteria)
     (('spam/eggs/foo', 'baz', 'bar'),)
