@@ -67,7 +67,7 @@ class RedirectorSection(object):
                     continue
 
                 multiple = True
-                paths = item[key]
+                paths = old_paths = item[key]
                 if not isinstance(paths, (tuple, list)):
                     multiple = False
                     paths = [paths]
@@ -105,7 +105,8 @@ class RedirectorSection(object):
 
                 if not multiple:
                     paths = paths[0]
-                self.logger.debug('Updating path(s) in %r: %s', key, paths)
+                self.logger.debug('Updating %r path(s): %r => %r',
+                                  key, old_paths, paths)
                 item[key] = paths
 
             # Collect old paths
@@ -123,8 +124,8 @@ class RedirectorSection(object):
                 # Add any new redirects
                 for old_path in old_paths:
                     if old_path and old_path != path:
-                        self.logger.debug(
-                            'Adding redirect for %r: %s', pathkey, old_path)
+                        self.logger.debug('Adding %r redirect: %r => %r',
+                                          pathkey, old_path, path)
                         storage.add(
                             self.context_path + str(old_path).lstrip('/'),
                             (self._is_external(path) and path) or
