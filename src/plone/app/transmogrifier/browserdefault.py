@@ -20,7 +20,6 @@ class BrowserDefaultSection(object):
                                              'defaultpage')
 
     def __iter__(self):
-        defered_links = []
         for item in self.previous:
             pathkey = self.pathkey(*item.keys())[0]
             if not pathkey:
