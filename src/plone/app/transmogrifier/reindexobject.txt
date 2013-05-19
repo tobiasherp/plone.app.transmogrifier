@@ -48,7 +48,7 @@ Paths to objects are always interpreted as relative to the context.
     ... """
     >>> registerConfig(u'plone.app.transmogrifier.tests.reindexobject', reindexobject)
 
-    >>> transmogrifier(u'plone.app.transmogrifier.tests.reindexobject')
+    >>> transmogrifier(u'plone.app.transmogrifier.tests.reindexobject') 
     >>> print(handler)
     logger INFO
       {'_path': '/spam/eggs/foo'}
@@ -64,6 +64,6 @@ Paths to objects are always interpreted as relative to the context.
        'title': 'Should not be reindexed, not an existing path'}
 
     >>> pprint.pprint(plone.reindexed)
-    (('spam/eggs/foo', 'reindexed'),
+    [('spam/eggs/foo', 'reindexed'),
      ('spam/eggs/bar', 'reindexed'),
-     ('spam/eggs/baz', 'reindexed'))
+     ('spam/eggs/baz', 'reindexed')]

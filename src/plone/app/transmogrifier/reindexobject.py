@@ -8,6 +8,7 @@ except ImportError:
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import defaultMatcher
+from collective.transmogrifier.utils import traverse
 
 import logging
 logger = logging.getLogger('plone.app.transmogrifier.reindexobject')
@@ -33,7 +34,7 @@ class ReindexObjectSection(object):
                 yield item; continue
             path = item[pathkey]
 
-            ob = self.context.unrestrictedTraverse(str(path).lstrip('/'), None)
+            ob = traverse(self.context, str(path).lstrip('/'), None)
             if ob is None:
                 yield item; continue # object not found
 

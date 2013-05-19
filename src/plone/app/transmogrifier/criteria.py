@@ -2,6 +2,7 @@ from zope.interface import classProvides, implements
 
 from collective.transmogrifier.interfaces import ISection, ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
+from collective.transmogrifier.utils import traverse
 
 from Acquisition import aq_base
 from Products.ATContentTypes.interface import IATTopic
@@ -36,7 +37,7 @@ class CriterionAdder(object):
 
             path = item[pathkey]
 
-            obj = self.context.unrestrictedTraverse(str(path).lstrip('/'), None)
+            obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None:         # path doesn't exist
                 yield item; continue
 

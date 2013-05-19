@@ -4,6 +4,7 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import Matcher
 from collective.transmogrifier.utils import defaultKeys
+from collective.transmogrifier.utils import traverse
 
 from Products.Archetypes.interfaces import IReferenceable
 from Products.Archetypes.config import UUID_ATTR
@@ -42,7 +43,7 @@ class UIDUpdaterSection(object):
             path = item[pathkey]
             uid = item[uidkey]
             
-            obj = self.context.unrestrictedTraverse(str(path).lstrip('/'), None)
+            obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None: # path doesn't exist
                 yield item; continue
             

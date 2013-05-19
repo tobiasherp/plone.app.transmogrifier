@@ -73,6 +73,6 @@ executed in order, failing transitions are silently ignored.
        '_transitions': ('nonsuch',),
        'title': 'Should not be updated, no such transition'}
     >>> pprint.pprint(plone.updated)
-    (('spam/eggs/foo', 'spam'),
+    [('spam/eggs/foo', 'spam'),
      ('spam/eggs/baz', 'spam'),
-     ('spam/eggs/baz', 'eggs'))
+     ('spam/eggs/baz', 'eggs')]

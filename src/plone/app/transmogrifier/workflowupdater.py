@@ -2,6 +2,7 @@ from zope.interface import classProvides, implements
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import defaultMatcher
+from collective.transmogrifier.utils import traverse
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import WorkflowException
@@ -35,7 +36,7 @@ class WorkflowUpdaterSection(object):
             if isinstance(transitions, basestring):
                 transitions = (transitions,)
             
-            obj = self.context.unrestrictedTraverse(str(path).lstrip('/'), None)
+            obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None:                      # path doesn't exist
                 yield item; continue
             

@@ -2,6 +2,7 @@ from zope.interface import classProvides, implements
 
 from collective.transmogrifier.interfaces import ISection, ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
+from collective.transmogrifier.utils import traverse
 
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 
@@ -30,7 +31,7 @@ class BrowserDefaultSection(object):
 
             path = item[pathkey]
 
-            obj = self.context.unrestrictedTraverse(str(path).lstrip('/'), None)
+            obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None:
                 yield item; continue
 

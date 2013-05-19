@@ -1,3 +1,4 @@
+import posixpath
 import unittest
 from zope.component import provideUtility
 from zope.interface import classProvides, implements
@@ -6,6 +7,9 @@ from collective.transmogrifier.interfaces import ISectionBlueprint, ISection
 from collective.transmogrifier.tests import tearDown
 from collective.transmogrifier.sections.tests import sectionsSetUp
 from collective.transmogrifier.sections.tests import SampleSource
+from collective.transmogrifier.sections.tests import MockObjectManager
+from collective.transmogrifier.sections.tests import _marker
+
 from Products.Five import zcml
 
 # Doctest support
@@ -17,6 +21,16 @@ def sectionsSetUp(test):
     ctSectionsSetup(test)
     import plone.app.transmogrifier
     zcml.load_config('configure.zcml', plone.app.transmogrifier)
+
+
+class MockObjectManager(MockObjectManager):
+
+        def _getOb(self, id_, default=_marker):
+            obj = super(MockObjectManager, self)._getOb(id_, default=default)
+            if getattr(obj, '_path', '').endswith('/notatcontent'):
+                return object()
+            return obj
+
 
 def portalTransformsSetUp(test):
     sectionsSetUp(test)
@@ -36,37 +50,36 @@ def aTSchemaUpdaterSetUp(test):
     sectionsSetUp(test)
 
     from Products.Archetypes.interfaces import IBaseObject
-    class MockPortal(object):
+
+    class MockPortal(MockObjectManager):
         implements(IBaseObject)
 
-        _last_path = None
-        def unrestrictedTraverse(self, path, default):
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
             if path[0] == '/':
-                return default # path is absolute
+                return False  # path is absolute
             if isinstance(path, unicode):
-                return default
+                return False
             if path == 'not/existing/bar':
-                return default
-            if path.endswith('/notatcontent'):
-                return object()
-            self._last_path = path
-            return self
+                return False
+            return True
 
-        _last_field = None
+        _last_field = []
+
         def getField(self, name):
             if name.startswith('field'):
-                self._last_field = name
+                self._last_field[:] = [name]
                 return self
 
         def get(self, ob):
-            if self._last_field.endswith('notchanged'):
+            if self._last_field[0].endswith('notchanged'):
                 return 'nochange'
-            if self._last_field.endswith('unicode'):
+            if self._last_field[0].endswith('unicode'):
                 return u'\xe5'.encode('utf8')
 
         @property
         def accessor(self):
-            if self._last_field in ('fieldone',):
+            if self._last_field[0] == 'fieldone':
                 return 'accessor_method'
             else:
                 return None
@@ -74,13 +87,14 @@ def aTSchemaUpdaterSetUp(test):
         def accessor_method(self):
             return '%s-by-mutator' % self.get(self)
 
-        updated = ()
+        updated = []
+
         def set(self, ob, val):
-            self.updated += ((self._last_path, self._last_field, val),)
+            self.updated.append((self._last_path[0], self._last_field[0], val))
 
         @property
         def mutator(self):
-            if self._last_field in ('fieldone',):
+            if self._last_field[0] == 'fieldone':
                 return 'mutator_method'
             else:
                 return None
@@ -128,28 +142,29 @@ def workflowUpdaterSetUp(test):
 
     from Products.CMFCore.WorkflowCore import WorkflowException
 
-    class MockPortal(object):
-        _last_path = None
-        def unrestrictedTraverse(self, path, default):
+    class MockPortal(MockObjectManager):
+
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
             if path[0] == '/':
-                return default # path is absolute
+                return False  # path is absolute
             if isinstance(path, unicode):
-                return default
+                return False
             if path == 'not/existing/bar':
-                return default
-            self._last_path = path
-            return self
+                return False
+            return True
 
         @property
         def portal_workflow(self):
             return self
 
-        updated = ()
+        updated = []
+
         def doActionFor(self, ob, action):
-            assert ob == self
+            assert isinstance(ob, self.__class__)
             if action == 'nonsuch':
                 raise WorkflowException('Test exception')
-            self.updated += ((self._last_path, action),)
+            self.updated.append((self._last_path[0], action))
 
     test.globs['plone'] = MockPortal()
     test.globs['transmogrifier'].context = test.globs['plone']
@@ -179,26 +194,28 @@ def browserDefaultSetUp(test):
     sectionsSetUp(test)
 
     from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
-    class MockPortal(object):
+
+    class MockPortal(MockObjectManager):
         implements(ISelectableBrowserDefault)
 
-        _last_path = None
-        def unrestrictedTraverse(self, path, default):
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
             if path[0] == '/':
-                return default # path is absolute
+                return False  # path is absolute
             if isinstance(path, unicode):
-                return default
+                return False
             if path == 'not/existing/bar':
-                return default
-            self._last_path = path
-            return self
+                return False
+            return True
 
-        updated = ()
+        updated = []
+
         def setLayout(self, layout):
-            self.updated += ((self._last_path, 'layout', layout),)
+            self.updated.append((self._last_path[0], 'layout', layout))
 
         def setDefaultPage(self, defaultpage):
-            self.updated += ((self._last_path, 'defaultpage', defaultpage),)
+            self.updated.append(
+                (self._last_path[0], 'defaultpage', defaultpage))
 
     test.globs['plone'] = MockPortal()
     test.globs['transmogrifier'].context = test.globs['plone']
@@ -229,21 +246,19 @@ def urlNormalizerSetUp(test):
     sectionsSetUp(test)
 
     from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
-    class MockPortal(object):
+
+    class MockPortal(MockObjectManager):
         implements(ISelectableBrowserDefault)
 
-        _last_path = None
-        def unrestrictedTraverse(self, path, default):
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
             if path[0] == '/':
-                return default # path is absolute
+                return False  # path is absolute
             if isinstance(path, unicode):
-                return default
+                return False
             if path == 'not/existing/bar':
-                return default
-            self._last_path = path
-            return self
-
-        updated = ()
+                return False
+            return True
 
     test.globs['plone'] = MockPortal()
     test.globs['transmogrifier'].context = test.globs['plone']
@@ -270,23 +285,24 @@ def criteriaSetUp(test):
     sectionsSetUp(test)
 
     from Products.ATContentTypes.interface import IATTopic
-    class MockPortal(object):
+
+    class MockPortal(MockObjectManager):
         implements(IATTopic)
 
-        _last_path = None
-        def unrestrictedTraverse(self, path, default):
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
             if path[0] == '/':
-                return default # path is absolute
+                return False  # path is absolute
             if isinstance(path, unicode):
-                return default
+                return False
             if path == 'not/existing/bar':
-                return default
-            self._last_path = path
-            return self
+                return False
+            return True
 
-        criteria = ()
+        criteria = []
+
         def addCriterion(self, field, criterion):
-            self.criteria += ((self._last_path, field, criterion),)
+            self.criteria.append((self._last_path[0], field, criterion))
 
     test.globs['plone'] = MockPortal()
     test.globs['transmogrifier'].context = test.globs['plone']
@@ -350,37 +366,30 @@ def uidSetUp(test):
 
     from Products.Archetypes.interfaces import IReferenceable
 
-    class MockReferenceableObject(object):
+    class MockPortal(MockObjectManager):
         implements(IReferenceable)
 
-        def __init__(self, path, portal):
-            self.path = path
-            self.portal = portal
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
+            if path[0] == '/':
+                return False  # path is absolute
+            if isinstance(path, unicode):
+                return False
+            if path == 'not/existing/bar':
+                return False
+            if path.endswith('/notatcontent'):
+                return object()
+            return True
 
+        uids_set = []
         _at_uid = 'xyz'
+
         def UID(self):
             return self._at_uid
 
         def _setUID(self, uid):
-            self.portal.uids_set.append((self.path, uid))
+            self.uids_set.append((self._path, uid))
             self._at_uid = uid
-
-    class MockPortal(object):
-        implements(IReferenceable)
-
-        _last_path = None
-        def unrestrictedTraverse(self, path, default):
-            if path[0] == '/':
-                return default # path is absolute
-            if isinstance(path, unicode):
-                return default
-            if path == 'not/existing/bar':
-                return default
-            if path.endswith('/notatcontent'):
-                return object()
-            return MockReferenceableObject(path, self)
-
-        uids_set = []
 
     test.globs['plone'] = MockPortal()
     test.globs['transmogrifier'].context = test.globs['plone']
@@ -409,31 +418,29 @@ def reindexObjectSetup(test):
     from Products.CMFCore.CMFCatalogAware import CatalogAware
     from Products.Archetypes.interfaces import IBaseObject
 
-    class MockCatalogAwareObject(CatalogAware): pass
-
-    class MockPortal(object):
+    class MockPortal(MockObjectManager, CatalogAware):
         implements(IBaseObject)
 
-        _last_path = None
-        def unrestrictedTraverse(self, path, default):
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
             if path[0] == '/':
-                return default # path is absolute
+                return False  # path is absolute
             if isinstance(path, unicode):
-                return default
+                return False
             if path == 'not/existing/bar':
-                return default
+                return False
             if path == 'not/a/catalog/aware/content':
-                return default
-            self._last_path = path
-            return MockCatalogAwareObject(self)
+                return False
+            return True
 
         @property
         def portal_catalog(self):
             return self
 
-        reindexed = ()
+        reindexed = []
+
         def reindexObject(self, ob):
-            self.reindexed += ((self._last_path, 'reindexed'),)
+            self.reindexed.append((self._last_path[0], 'reindexed'))
 
     test.globs['plone'] = MockPortal()
     test.globs['transmogrifier'].context = test.globs['plone']

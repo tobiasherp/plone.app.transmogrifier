@@ -60,4 +60,4 @@ resolve to IATTopic classes.
         {'_path': 'spam/eggs/incomplete',
        'title': 'Should not be updated, no criterion or field'}
     >>> pprint.pprint(plone.criteria)
-    (('spam/eggs/foo', 'baz', 'bar'),)
+    [('spam/eggs/foo', 'baz', 'bar')]
