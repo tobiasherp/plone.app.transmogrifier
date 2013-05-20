@@ -103,9 +103,10 @@ class RedirectorSection(object):
 
                 if not multiple:
                     paths = paths[0]
-                self.logger.debug('Updating %r path(s): %r => %r',
-                                  key, old_paths, paths)
-                item[key] = paths
+                if item[key] != paths:
+                    self.logger.debug('Updating %r path(s): %r => %r',
+                                      key, old_paths, paths)
+                    item[key] = paths
 
             # Collect old paths
             old_paths = set()
@@ -119,15 +120,17 @@ class RedirectorSection(object):
             pathkey = self.pathkey(*keys)[0]
             if pathkey:
                 path = item[pathkey]
+                new_path = ((self._is_external(path) and path)
+                            or posixpath.join(self.context_path,
+                                              str(path).lstrip('/')))
                 # Add any new redirects
                 for old_path in old_paths:
-                    if old_path and old_path != path:
+                    old_path = posixpath.join(
+                        self.context_path, str(old_path).lstrip('/'))
+                    if old_path and old_path != new_path:
                         self.logger.debug('Adding %r redirect: %r => %r',
-                                          pathkey, old_path, path)
-                        storage.add(
-                            self.context_path + str(old_path).lstrip('/'),
-                            (self._is_external(path) and path) or
-                            self.context_path + str(path).lstrip('/'))
+                                          pathkey, old_path, new_path)
+                        storage.add(old_path, new_path)
 
             yield item
 
