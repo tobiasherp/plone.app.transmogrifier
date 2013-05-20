@@ -85,15 +85,12 @@ and update paths in keys.
     >>> from zope.component import getUtility
     >>> from plone.app.redirector.interfaces import IRedirectionStorage
     >>> storage = getUtility(IRedirectionStorage)
-    >>> pprint.pprint([storage.redirects(path) for path in (
-    ...     '/plone/foo', '/plone/foo/item-00',
-    ...     '/plone/foo/bar', '/plone/foo/bar/item-01',
-    ...     'http://nohost/foo/bar/item-01',
-    ...     '/plone/foo/bar/qux', '/plone/foo/bar/qux/item-02')])
-    [['/plone/corge', '/plone/waldo'],
-     ['/plone/corge/item-00', '/plone/waldo/item-00'],
-     ['/plone/corge/grault', '/plone/waldo/fred'],
-     [],
-     ['/plone/corge/grault/item-01', '/plone/waldo/fred/item-01'],
-     [],
-     []]
+    >>> pprint.pprint(dict((path, storage.get(path)) for path in storage))
+    {'/plone/corge': '/plone/foo',
+     '/plone/corge/grault': '/plone/foo/bar',
+     '/plone/corge/grault/item-01': 'http://nohost/foo/bar/item-01',
+     '/plone/corge/item-00': '/plone/foo/item-00',
+     '/plone/waldo': '/plone/foo',
+     '/plone/waldo/fred': '/plone/foo/bar',
+     '/plone/waldo/fred/item-01': 'http://nohost/foo/bar/item-01',
+     '/plone/waldo/item-00': '/plone/foo/item-00'}
