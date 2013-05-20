@@ -17,7 +17,6 @@ from plone.app.redirector.interfaces import IRedirectionStorage
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import defaultKeys, defaultMatcher
-from collective.transmogrifier.utils import pathsplit
 
 
 class RedirectorSection(object):
@@ -90,11 +89,10 @@ class RedirectorSection(object):
                     path = str(path)
                     stripped = path.lstrip('/')
                     leading = path[:-len(stripped)]
-                    new_path = old_path = self.context_path
-                    for elem in pathsplit(stripped):
-                        old_path = posixpath.join(old_path, elem)
-                        new_path = posixpath.join(new_path, elem)
-                        new_path = storage.get(old_path, new_path)
+                    new_path = storage.get(
+                        posixpath.join(self.context_path, stripped))
+                    if new_path is None:
+                        continue
                     if not urlparse.urlsplit(new_path).netloc:
                         new_path = leading + new_path[len(self.context_path):]
 

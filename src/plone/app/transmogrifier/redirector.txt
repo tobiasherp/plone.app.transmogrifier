@@ -9,6 +9,7 @@ and update paths in keys.
     ... [transmogrifier]
     ... pipeline =
     ...     source
+    ...     clean-old-paths
     ...     old-paths
     ...     content-element
     ...     redirect
@@ -18,6 +19,11 @@ and update paths in keys.
     ... [source]
     ... blueprint = collective.transmogrifier.sections.csvsource
     ... filename = plone.app.transmogrifier:redirector.csv
+    ... 
+    ... [clean-old-paths]
+    ... blueprint = collective.transmogrifier.sections.manipulator
+    ... condition = not:item/_old_paths|nothing
+    ... delete = _old_paths
     ... 
     ... [old-paths]
     ... blueprint = collective.transmogrifier.sections.inserter
@@ -54,7 +60,7 @@ and update paths in keys.
     logger INFO
       {'_old_paths': ['corge', 'waldo'], '_redirect_path': 'foo', 'remoteUrl': ''}
     logger INFO
-      {'_old_paths': [''], '_redirect_path': 'foo', 'remoteUrl': ''}
+      {'_redirect_path': 'foo', 'remoteUrl': ''}
     logger INFO
         {'_old_paths': ['corge/item-00', 'waldo/item-00'],
        '_redirect_path': 'foo/item-00',
@@ -69,10 +75,9 @@ and update paths in keys.
        '_redirect_path': 'http://nohost/foo/bar/item-01',
        'remoteUrl': 'foo/item-00'}
     logger INFO
-      {'_old_paths': [''], '_redirect_path': '/foo/bar/qux/', 'remoteUrl': ''}
+      {'_redirect_path': '/foo/bar/qux/', 'remoteUrl': ''}
     logger INFO
         {'_content_element': 'http://nohost/foo/bar/item-01',
-       '_old_paths': [''],
        '_redirect_path': '/foo/bar/qux/item-02',
        'remoteUrl': 'http://nohost/foo/bar/item-01'}
 
