@@ -88,13 +88,14 @@ class RedirectorSection(object):
 
                     path = str(path)
                     stripped = path.lstrip('/')
-                    leading = path[:-len(stripped)]
-                    new_path = storage.get(
-                        posixpath.join(self.context_path, stripped))
+                    new_path = storage.get(posixpath.abspath(
+                        self.context_path + posixpath.abspath(
+                            posixpath.join(posixpath.sep, stripped))))
                     if new_path is None:
                         continue
                     if not urlparse.urlsplit(new_path).netloc:
-                        new_path = leading + new_path[len(self.context_path):]
+                        new_path = posixpath.abspath(posixpath.join(
+                            posixpath.sep, new_path[len(self.context_path):]))
 
                     if is_element:
                         obj.attrib[attrib] = new_path

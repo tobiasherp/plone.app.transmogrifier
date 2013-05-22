@@ -60,7 +60,7 @@ and update paths in keys.
     logger INFO
       {'_old_paths': ['corge', 'waldo'], '_redirect_path': 'foo', 'remoteUrl': ''}
     logger INFO
-      {'_redirect_path': 'foo', 'remoteUrl': ''}
+      {'_redirect_path': '/foo', 'remoteUrl': ''}
     logger INFO
         {'_old_paths': ['corge/item-00', 'waldo/item-00'],
        '_redirect_path': 'foo/item-00',
@@ -70,10 +70,10 @@ and update paths in keys.
        '_redirect_path': 'foo/bar',
        'remoteUrl': ''}
     logger INFO
-        {'_content_element': 'foo/item-00',
+        {'_content_element': '/foo/item-00',
        '_old_paths': ['corge/grault/item-01', 'waldo/fred/item-01'],
        '_redirect_path': 'http://nohost/foo/bar/item-01',
-       'remoteUrl': 'foo/item-00'}
+       'remoteUrl': '/foo/item-00'}
     logger INFO
       {'_redirect_path': '/foo/bar/qux/', 'remoteUrl': ''}
     logger INFO
