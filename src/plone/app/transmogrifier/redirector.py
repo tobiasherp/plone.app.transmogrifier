@@ -17,6 +17,8 @@ from plone.app.redirector.interfaces import IRedirectionStorage
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import defaultKeys, defaultMatcher
+from collective.transmogrifier.utils import pathsplit
+from collective.transmogrifier.utils import traverse
 
 
 class RedirectorSection(object):
@@ -25,9 +27,9 @@ class RedirectorSection(object):
 
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
-        self.context_path = '/'.join(
-            transmogrifier.context.getPhysicalPath()) + '/'
-        self.context_url = transmogrifier.context.absolute_url()
+        self.context = transmogrifier.context
+        self.context_path = '/'.join(self.context.getPhysicalPath()) + '/'
+        self.context_url = self.context.absolute_url()
         self.logger = logging.getLogger(name)
 
         self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
@@ -86,11 +88,13 @@ class RedirectorSection(object):
                     if self._is_external(path):
                         continue
 
-                    path = str(path)
-                    stripped = path.lstrip('/')
-                    new_path = storage.get(posixpath.abspath(
-                        self.context_path + posixpath.abspath(
-                            posixpath.join(posixpath.sep, stripped))))
+                    abspath = posixpath.abspath(posixpath.join(
+                        posixpath.sep, str(path).lstrip('/'))).lstrip('/')
+                    new_path = old_path = self.context_path
+                    for elem in pathsplit(abspath):
+                        old_path = posixpath.join(old_path, elem)
+                        new_path = posixpath.join(new_path, elem)
+                        new_path = storage.get(old_path, new_path)
                     if new_path is None:
                         continue
                     if not urlparse.urlsplit(new_path).netloc:
@@ -121,14 +125,20 @@ class RedirectorSection(object):
             pathkey = self.pathkey(*keys)[0]
             if pathkey:
                 path = item[pathkey]
-                new_path = ((self._is_external(path) and path)
-                            or posixpath.join(self.context_path,
-                                              str(path).lstrip('/')))
+                new_path = (
+                    self._is_external(path) and path
+                    or posixpath.join(self.context_path,
+                                      str(path).lstrip('/'))).rstrip('/')
                 # Add any new redirects
                 for old_path in old_paths:
                     old_path = posixpath.join(
-                        self.context_path, str(old_path).lstrip('/'))
-                    if old_path and old_path != new_path:
+                        self.context_path,
+                        str(old_path).lstrip('/')).rstrip('/')
+                    if (old_path and old_path != new_path
+                        # Avoid recursive redirects
+                        and not new_path.startswith(old_path + '/')
+                        and not storage.has_path(old_path)
+                        and traverse(self.context, old_path) is None):
                         self.logger.debug('Adding %r redirect: %r => %r',
                                           pathkey, old_path, new_path)
                         storage.add(old_path, new_path)
