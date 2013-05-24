@@ -58,24 +58,24 @@ and update paths in keys.
     >>> transmogrifier(u'plone.app.transmogrifier.tests.redirector')
     >>> print handler
     logger INFO
-      {'_old_paths': ['corge', 'waldo'], '_redirect_path': '/foo', 'remoteUrl': '/'}
+      {'_old_paths': ['corge', 'waldo'], '_redirect_path': 'foo', 'remoteUrl': ''}
     logger INFO
-      {'_redirect_path': '/foo', 'remoteUrl': '/'}
+      {'_redirect_path': 'foo', 'remoteUrl': ''}
     logger INFO
         {'_old_paths': ['corge/item-00', 'waldo/item-00'],
-       '_redirect_path': '/foo/item-00',
-       'remoteUrl': '/'}
+       '_redirect_path': 'foo/item-00',
+       'remoteUrl': ''}
     logger INFO
         {'_old_paths': ['corge/grault', 'waldo/fred'],
-       '_redirect_path': '/foo/bar',
-       'remoteUrl': '/'}
+       '_redirect_path': 'foo/bar',
+       'remoteUrl': ''}
     logger INFO
-        {'_content_element': '/foo/item-00#fragment',
+        {'_content_element': 'foo/item-00#fragment',
        '_old_paths': ['corge/grault/item-01', 'waldo/fred/item-01'],
        '_redirect_path': 'http://nohost/foo/bar/item-01',
-       'remoteUrl': '/foo/item-00#fragment'}
+       'remoteUrl': 'foo/item-00#fragment'}
     logger INFO
-      {'_redirect_path': '/foo/bar/qux', 'remoteUrl': '/'}
+      {'_redirect_path': 'foo/bar/qux', 'remoteUrl': ''}
     logger INFO
         {'_content_element': 'http://nohost/foo/bar/item-01',
        '_redirect_path': '/foo/bar/qux/item-02',

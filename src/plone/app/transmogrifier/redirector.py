@@ -102,12 +102,13 @@ class RedirectorSection(object):
                         new_path = posixpath.abspath(posixpath.join(
                             posixpath.sep, new_path[len(self.context_path):]))
                     new_path = urlparse.urlunsplit(
-                        url[:2] + (new_path, ) + url[3:])
+                        url[:2] + (new_path, ) + url[3:]).lstrip('/')
 
-                    if is_element:
-                        obj.attrib[attrib] = new_path
-                        new_path = obj
-                    paths[idx] = new_path
+                    if new_path != path.lstrip('/'):
+                        if is_element:
+                            obj.attrib[attrib] = new_path
+                            new_path = obj
+                        paths[idx] = new_path
 
                 if not multiple:
                     paths = paths[0]
