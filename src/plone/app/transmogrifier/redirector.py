@@ -85,11 +85,12 @@ class RedirectorSection(object):
                             # No attribute in this element
                             continue
 
-                    if self._is_external(path):
+                    url = urlparse.urlsplit(path)
+                    if self._is_external(url):
                         continue
 
                     abspath = posixpath.abspath(posixpath.join(
-                        posixpath.sep, str(path).lstrip('/'))).lstrip('/')
+                        posixpath.sep, str(url.path).lstrip('/'))).lstrip('/')
                     new_path = old_path = self.context_path
                     for elem in pathsplit(abspath):
                         old_path = posixpath.join(old_path, elem)
@@ -100,6 +101,8 @@ class RedirectorSection(object):
                     if not urlparse.urlsplit(new_path).netloc:
                         new_path = posixpath.abspath(posixpath.join(
                             posixpath.sep, new_path[len(self.context_path):]))
+                    new_path = urlparse.urlunsplit(
+                        url[:2] + (new_path, ) + url[3:])
 
                     if is_element:
                         obj.attrib[attrib] = new_path
@@ -125,8 +128,9 @@ class RedirectorSection(object):
             pathkey = self.pathkey(*keys)[0]
             if pathkey:
                 path = item[pathkey]
+                url = urlparse.urlsplit(path)
                 new_path = (
-                    self._is_external(path) and path
+                    self._is_external(url) and path
                     or posixpath.join(self.context_path,
                                       str(path).lstrip('/'))).rstrip('/')
                 # Add any new redirects
@@ -145,6 +149,5 @@ class RedirectorSection(object):
 
             yield item
 
-    def _is_external(self, path):
-        return urlparse.urlsplit(path).netloc and not path.startswith(
-            self.context_url)
+    def _is_external(self, url):
+        return url.netloc and not url.geturl().startswith(self.context_url)

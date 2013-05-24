@@ -3,6 +3,6 @@ foo,corge|waldo,
 corge,,
 foo/item-00,corge/item-00|waldo/item-00,
 foo/bar,corge/grault|waldo/fred,
-http://nohost/foo/bar/item-01,corge/grault/item-01|waldo/fred/item-01,corge/item-00
+http://nohost/foo/bar/item-01,corge/grault/item-01|waldo/fred/item-01,corge/item-00#fragment
 /foo/bar/qux/,,
 /foo/bar/qux/item-02,,/corge/grault/item-01

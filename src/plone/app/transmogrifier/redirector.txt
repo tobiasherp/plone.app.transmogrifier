@@ -70,10 +70,10 @@ and update paths in keys.
        '_redirect_path': '/foo/bar',
        'remoteUrl': '/'}
     logger INFO
-        {'_content_element': '/foo/item-00',
+        {'_content_element': '/foo/item-00#fragment',
        '_old_paths': ['corge/grault/item-01', 'waldo/fred/item-01'],
        '_redirect_path': 'http://nohost/foo/bar/item-01',
-       'remoteUrl': '/foo/item-00'}
+       'remoteUrl': '/foo/item-00#fragment'}
     logger INFO
       {'_redirect_path': '/foo/bar/qux', 'remoteUrl': '/'}
     logger INFO
