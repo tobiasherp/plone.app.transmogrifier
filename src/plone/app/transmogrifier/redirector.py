@@ -97,8 +97,6 @@ class RedirectorSection(object):
                         old_path = posixpath.join(old_path, elem)
                         new_path = posixpath.join(new_path, elem)
                         new_path = storage.get(old_path, new_path)
-                    if new_path is None:
-                        continue
                     if not urlparse.urlsplit(new_path).netloc:
                         new_path = leading + new_path[len(self.context_path):]
                     new_path = urlparse.urlunsplit(
