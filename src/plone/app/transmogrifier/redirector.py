@@ -85,6 +85,7 @@ class RedirectorSection(object):
                             # No attribute in this element
                             continue
 
+                    leading = path[:-len(path.lstrip('/'))]
                     url = urlparse.urlsplit(path)
                     if self._is_external(url):
                         continue
@@ -99,10 +100,9 @@ class RedirectorSection(object):
                     if new_path is None:
                         continue
                     if not urlparse.urlsplit(new_path).netloc:
-                        new_path = posixpath.abspath(posixpath.join(
-                            posixpath.sep, new_path[len(self.context_path):]))
+                        new_path = leading + new_path[len(self.context_path):]
                     new_path = urlparse.urlunsplit(
-                        url[:2] + (new_path, ) + url[3:]).lstrip('/')
+                        url[:2] + (new_path, ) + url[3:])
 
                     if new_path != path.lstrip('/'):
                         if is_element:
