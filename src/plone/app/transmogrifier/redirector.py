@@ -17,6 +17,7 @@ from plone.app.redirector.interfaces import IRedirectionStorage
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import defaultKeys, defaultMatcher
+from collective.transmogrifier.utils import Condition
 from collective.transmogrifier.utils import pathsplit
 from collective.transmogrifier.utils import traverse
 
@@ -27,6 +28,9 @@ class RedirectorSection(object):
 
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
+        self.condition = Condition(options.get('condition', 'python:True'),
+                                   transmogrifier, name, options)
+
         self.context = transmogrifier.context
         self.context_path = '/'.join(self.context.getPhysicalPath()) + '/'
         self.context_url = self.context.absolute_url()
@@ -65,6 +69,9 @@ class RedirectorSection(object):
 
             for key in keys:
                 if not self.updatepathkeys(key)[1]:
+                    continue
+
+                if not self.condition(item, key=key):
                     continue
 
                 multiple = True
