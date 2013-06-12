@@ -25,16 +25,11 @@ def _compare(fieldval, itemval):
 
 
 def get(field, obj):
-    if field.accessor is not None:
-        return getattr(obj, field.accessor)()
-    return field.get(obj)
+    return field.getAccessor(obj)()
 
 
 def set(field, obj, val):
-    if field.mutator is not None:
-        getattr(obj, field.mutator)(val)
-    else:
-        field.set(obj, val)
+    field.getMutator(obj)(val)
 
 
 class ATSchemaUpdaterSection(object):
