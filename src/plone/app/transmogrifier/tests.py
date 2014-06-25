@@ -1,5 +1,6 @@
 import posixpath
 import unittest
+from DateTime.DateTime import DateTime
 from zope.component import provideUtility
 from zope.interface import classProvides, implements
 from zope.testing import doctest
@@ -160,6 +161,8 @@ def workflowUpdaterSetUp(test):
 
         updated = []
 
+        workflow_history = {}
+
         def doActionFor(self, ob, action):
             assert isinstance(ob, self.__class__)
             if action == 'nonsuch':
@@ -185,6 +188,10 @@ def workflowUpdaterSetUp(test):
                 dict(_path='/spam/eggs/nosuchtransition',
                      _transitions=('nonsuch',),
                      title='Should not be updated, no such transition'),
+                dict(_path='/spam/eggs/bla', _transitions=(
+                        {'action': 'spam', 'review_state': 'spammed', 'time': DateTime("2014-06-20")},
+                    )
+                ),
             )
     provideUtility(WorkflowSource,
         name=u'plone.app.transmogrifier.tests.workflowsource')

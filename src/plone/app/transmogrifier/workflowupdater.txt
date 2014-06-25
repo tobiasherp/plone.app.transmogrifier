@@ -32,7 +32,10 @@ as ``path-key``), defaulting to
 
 Unicode paths are encoded to ASCII. Paths to objects are always interpreted as
 relative to the context object. Transitions are specified as a sequence of
-transition names, or as a string specifying one transition. Transitions are
+transition names, or as a string specifying one transition, or a list of 
+dictionaries containing 'action' as transition id, 'review_state' as state id 
+and 'time' as a DateTime representing the transition time (if so, the worflow
+history will be updated with the provided date). Transitions are
 executed in order, failing transitions are silently ignored.
 
     >>> import pprint
@@ -72,7 +75,14 @@ executed in order, failing transitions are silently ignored.
         {'_path': '/spam/eggs/nosuchtransition',
        '_transitions': ('nonsuch',),
        'title': 'Should not be updated, no such transition'}
+    logger INFO
+        {'_path': '/spam/eggs/bla',
+       '_transitions': ({'action': 'spam',
+                         'review_state': 'spammed',
+                         'time': DateTime('2014/06/20 00:00:00 GMT+0')},)}
+
     >>> pprint.pprint(plone.updated)
     [('spam/eggs/foo', 'spam'),
      ('spam/eggs/baz', 'spam'),
-     ('spam/eggs/baz', 'eggs')]
+     ('spam/eggs/baz', 'eggs'),
+     ('spam/eggs/bla', 'spam')]
