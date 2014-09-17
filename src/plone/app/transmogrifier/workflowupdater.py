@@ -41,9 +41,26 @@ class WorkflowUpdaterSection(object):
                 yield item; continue
             
             for transition in transitions:
-                try:
-                    self.wftool.doActionFor(obj, transition)
-                except WorkflowException:
-                    pass
+                if not isinstance(transition, basestring):
+                    state = transition['review_state']
+                    time = transition['time']
+                    action = transition.get('action')
+                    # no action if initial state
+                    if action:
+                        try:
+                            self.wftool.doActionFor(obj, action)
+                        except WorkflowException:
+                            pass
+                    history = obj.workflow_history
+                    for wf in history:
+                        for wf_state in history[wf]:
+                            if wf_state['review_state'] == state:
+                                wf_state['time'] = time
+                    obj.workflow_history = history
+                else:
+                    try:
+                        self.wftool.doActionFor(obj, transition)
+                    except WorkflowException:
+                        pass
             
             yield item

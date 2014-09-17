@@ -6,6 +6,8 @@ Change History
 1.3 (unreleased)
 ================
 
+- Allow to import transition date in the worflow history
+  [ebrehault]
 - Fix field accessor and mutator for updating schemaextended field values
   with schemaupdater.
   In some cases when using fields extended by schemaextender it defines
