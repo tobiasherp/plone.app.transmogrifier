@@ -9,6 +9,9 @@ from collective.transmogrifier.utils import traverse
 from Products.Archetypes.interfaces import IReferenceable
 from Products.Archetypes.config import UUID_ATTR
 
+from plone.uuid.interfaces import IAttributeUUID
+from plone.uuid.interfaces import IMutableUUID
+
 class UIDUpdaterSection(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
@@ -54,5 +57,8 @@ class UIDUpdaterSection(object):
                         setattr(obj, UUID_ATTR, uid)
                     else:
                         obj._setUID(uid)
+
+            if IAttributeUUID.providedBy(obj):
+                IMutableUUID(obj).set(uid)
                 
             yield item
