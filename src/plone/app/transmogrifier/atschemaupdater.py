@@ -1,14 +1,14 @@
-from zope import event
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
+from Products.Archetypes.event import ObjectEditedEvent
+from Products.Archetypes.event import ObjectInitializedEvent
+from Products.Archetypes.interfaces import IBaseObject
 from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import Matcher
 from collective.transmogrifier.utils import defaultKeys
 from collective.transmogrifier.utils import traverse
+from zope import event
+from zope.interface import classProvides, implements
 
-from Products.Archetypes.interfaces import IBaseObject
-from Products.Archetypes.event import ObjectInitializedEvent
-from Products.Archetypes.event import ObjectEditedEvent
 
 def _compare(fieldval, itemval):
     """Compare a AT Field value with an item value
@@ -51,18 +51,20 @@ class ATSchemaUpdaterSection(object):
             pathkey = self.pathkey(*item.keys())[0]
 
             if not pathkey:         # not enough info
-                yield item; continue
+                yield item
+                continue
 
             path = item[pathkey]
 
             obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None:         # path doesn't exist
-                yield item; continue
+                yield item
+                continue
 
             if IBaseObject.providedBy(obj):
                 changed = False
                 is_new_object = obj.checkCreationFlag()
-                for k,v in item.iteritems():
+                for k, v in item.iteritems():
                     if k.startswith('_'):
                         continue
                     field = obj.getField(k)

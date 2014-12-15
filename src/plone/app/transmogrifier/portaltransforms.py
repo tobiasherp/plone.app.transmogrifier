@@ -1,14 +1,14 @@
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
-from collective.transmogrifier.interfaces import ISection
-from collective.transmogrifier.utils import Matcher, Condition
-
 from Products.CMFCore.utils import getToolByName
+from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.utils import Matcher, Condition
+from zope.interface import classProvides, implements
+
 
 class PortalTransformsSection(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
-    
+
     def __init__(self, transmogrifier, name, options, previous):
         self.ptransforms = getToolByName(transmogrifier.context,
                                          'portal_transforms')
@@ -20,7 +20,7 @@ class PortalTransformsSection(object):
         self.condition = Condition(options.get('condition', 'python:True'),
                                    transmogrifier, name, options)
         self.previous = previous
-    
+
     def __iter__(self):
         for item in self.previous:
             for key in item:
