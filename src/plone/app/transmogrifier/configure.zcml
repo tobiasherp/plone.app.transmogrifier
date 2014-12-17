@@ -26,6 +26,11 @@
       />
 
   <utility
+      component=".pathfixer.PathFixer"
+      name="plone.app.transmogrifier.pathfixer"
+      />
+
+  <utility
       component=".portaltransforms.PortalTransformsSection"
       name="plone.app.transmogrifier.portaltransforms"
       />
