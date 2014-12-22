@@ -41,7 +41,7 @@ Now lets manipulate it::
     ... blueprint = plone.app.transmogrifier.pathfixer
     ... path-key = _path
     ... stripstring = /spam/eggs/
-    ... prependstring = /new/plone/
+    ... prependstring = subfolder/
     ... 
     ... [logger]
     ... blueprint = collective.transmogrifier.sections.logger
@@ -53,9 +53,9 @@ Now lets manipulate it::
     >>> transmogrifier(u'plone.app.transmogrifier.tests.pathfixer')
     >>> print handler
     logger INFO
-      /new/plone/foo
+      subfolder/foo
     logger INFO
-      /new/plone/not/existing/bar
+      subfolder/not/existing/bar
     logger INFO
-      /new/plone/notatcontent
+      subfolder/notatcontent
 
