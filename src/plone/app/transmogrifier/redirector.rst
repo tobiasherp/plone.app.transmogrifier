@@ -1,5 +1,5 @@
 Redirector section
-==================
+------------------
 
 A redirector section uses `plone.app.redirector`_ to manage redirects
 and update paths in keys.

@@ -1,5 +1,5 @@
 PathFixer section
-=================
+-----------------
 
 When importing contents from a old site into a new, the path to the Plone site
 root may have changed. This blueprint updates the old paths to match the new

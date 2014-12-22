@@ -1,5 +1,5 @@
 Criterion adder section
-=======================
+-----------------------
 
 A criterion adder section is used to add criteria to collections. It's section
 blueprint name is ``plone.app.transmogrifier.criterionadder``. Criterion adder

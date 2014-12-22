@@ -1,5 +1,5 @@
 Portal Transforms section
-=========================
+-------------------------
 
 A portal transforms pipeline section lets you use Portal Transforms to
 transform item values. The portal transforms section blueprint name is
@@ -74,7 +74,7 @@ happening. The condition is evaluated for every matched key.
 
 The ``condition`` expression has access to the following:
 
-=================== ==========================================================
+------------------- ----------------------------------------------------------
  ``item``            the current pipeline item
  ``key``             the name of the matched key
  ``match``           if the key was matched by a regular expression, the match
@@ -83,4 +83,4 @@ The ``condition`` expression has access to the following:
  ``name``            the name of the splitter section
  ``options``         the splitter options
  ``modules``         sys.modules
-=================== ==========================================================
+------------------- ----------------------------------------------------------

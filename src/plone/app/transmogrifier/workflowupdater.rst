@@ -1,5 +1,5 @@
 Workflow updater section
-========================
+------------------------
 
 A workflow updater pipeline section is another important transmogrifier
 content import pipeline element. It executes workflow transitions on Plone

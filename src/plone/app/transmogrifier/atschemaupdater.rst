@@ -1,5 +1,5 @@
 ATSchema updater section
-========================
+------------------------
 
 An AT schema updater pipeline section is another important transmogrifier
 content import pipeline element. It updates field values for Archetypes

@@ -1,8 +1,8 @@
-Change History
-**************
+Changelog
+========= 
 
 1.3 (unreleased)
-================
+----------------
 
 - Add pathfixer section to remove/prepend parts of the path.
   [thet]
@@ -34,7 +34,7 @@ Change History
 
 
 1.2 (2011-05-23)
-================
+----------------
 
 - Sections to disable and enable versioning within the pipeline.
   [elro]
@@ -53,12 +53,12 @@ Change History
 
 
 1.1 (2010-03-30)
-================
+----------------
 
-- Added Indexing section. See reindexobject.txt.
+- Added Indexing section. See reindexobject.rst.
   [sylvainb]
 
-- Added UID updated section. See uidupdater.txt.
+- Added UID updated section. See uidupdater.rst.
   [optilude]
 
 - Fixed tests for Plone 4, in the same way that they were fixed in
@@ -67,7 +67,7 @@ Change History
 
 
 1.0 (2009-08-09)
-================
+----------------
 
 - Initial package.
   [mj]

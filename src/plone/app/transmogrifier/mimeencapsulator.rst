@@ -1,5 +1,5 @@
 Mime encapsulator section
-=========================
+-------------------------
 
 A mime encapsulator section wraps arbitrary data in ``OFS.Image.File``
 objects, together with a MIME type. This wrapping is a pre-requisite for
@@ -68,7 +68,7 @@ portrait: (image/jpeg) someportraitdata
 
 The ``field`` expression has access to the following:
 
-=================== ==========================================================
+------------------- ----------------------------------------------------------
  ``item``            the current pipeline item
  ``key``             the name of the matched data key
  ``match``           if the key was matched by a regular expression, the match
@@ -77,19 +77,19 @@ The ``field`` expression has access to the following:
  ``name``            the name of the splitter section
  ``options``         the splitter options
  ``modules``         sys.modules
-=================== ==========================================================
+------------------- ----------------------------------------------------------
 
 The ``mimetype`` expression has access to the same information as the ``field``
 expression, plus:
 
-=================== ==========================================================
+------------------- ----------------------------------------------------------
 ``field``            the name of the field in which the encapsulated data will
                      be stored.
-=================== ==========================================================
+------------------- ----------------------------------------------------------
 
 The ``condition`` expression has access to the same information as the
 ``mimetype`` expression, plus:
 
-=================== ==========================================================
+------------------- ----------------------------------------------------------
 ``mimetype``         the mimetype used to encapsulate the data.
-=================== ==========================================================
+------------------- ----------------------------------------------------------

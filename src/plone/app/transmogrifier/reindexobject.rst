@@ -1,5 +1,5 @@
 Indexing section
-===================
+----------------
 
 A ReindexObject section allows you to reindex an existing object in the
 portal_catalog. ReindexObject sections operate on objects already present in the

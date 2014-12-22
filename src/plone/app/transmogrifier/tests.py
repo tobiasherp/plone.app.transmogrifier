@@ -545,47 +545,47 @@ def pathfixerSetUp(test):
 def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
-            'portaltransforms.txt',
+            'portaltransforms.rst',
             optionflags=optionflags,
             setUp=portalTransformsSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'atschemaupdater.txt',
+            'atschemaupdater.rst',
             optionflags=optionflags,
             setUp=aTSchemaUpdaterSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'uidupdater.txt',
+            'uidupdater.rst',
             optionflags=optionflags,
             setUp=uidSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'workflowupdater.txt',
+            'workflowupdater.rst',
             optionflags=optionflags,
             setUp=workflowUpdaterSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'browserdefault.txt',
+            'browserdefault.rst',
             optionflags=optionflags,
             setUp=browserDefaultSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'urlnormalizer.txt',
+            'urlnormalizer.rst',
             optionflags=optionflags,
             setUp=urlNormalizerSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'criteria.txt',
+            'criteria.rst',
             optionflags=optionflags,
             setUp=criteriaSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'mimeencapsulator.txt',
+            'mimeencapsulator.rst',
             optionflags=optionflags,
             setUp=mimeencapsulatorSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'reindexobject.txt',
+            'reindexobject.rst',
             optionflags=optionflags,
             setUp=reindexObjectSetup, tearDown=tearDown),
         doctest.DocFileSuite(
-            'redirector.txt',
+            'redirector.rst',
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.REPORT_NDIFF,
             setUp=redirectorSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'pathfixer.txt',
+            'pathfixer.rst',
             optionflags=optionflags,
             setUp=pathfixerSetUp, tearDown=tearDown),
     ))

@@ -1,5 +1,5 @@
 UID updater section
-===================
+-------------------
 
 If an Archetypes content object is created in a pipeline, e.g. by the standard
 content constructor section, it will get a new UID. If you are importing

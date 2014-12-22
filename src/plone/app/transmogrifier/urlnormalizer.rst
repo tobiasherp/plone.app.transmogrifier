@@ -1,5 +1,5 @@
 URL Normalizer section
-======================
+----------------------
 
 A URLNormalizer section allows you to parse any piece of text into a url-safe string which is then assigned to a specified key. It uses plone.i18n.normalizer to perform the normalization. The url normalizer section blueprint name is
 	``plone.app.transmogrifier.urlnormalizer``.

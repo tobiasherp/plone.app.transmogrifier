@@ -3,7 +3,7 @@ from setuptools import setup
 import os
 
 
-version = '1.2'
+version = '1.3.dev0'
 
 
 def read(*rnames):
@@ -12,25 +12,23 @@ def read(*rnames):
 long_description = ('\n'.join((
     read('README.rst'), ''
     'Detailed Documentation',
-    '**********************', '',
-    read('src', 'plone', 'app', 'transmogrifier', 'atschemaupdater.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'uidupdater.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'workflowupdater.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'browserdefault.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'criteria.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'portaltransforms.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'urlnormalizer.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'mimeencapsulator.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'reindexobject.txt'), '',
-    read('src', 'plone', 'app', 'transmogrifier', 'versioning.txt'), '',
+    '======================', '',
+    read('src', 'plone', 'app', 'transmogrifier', 'atschemaupdater.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'browserdefault.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'criteria.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'mimeencapsulator.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'pathfixer.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'portaltransforms.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'redirector.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'reindexobject.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'uidupdater.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'urlnormalizer.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'versioning.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'workflowupdater.rst'), '',
 
-    read('docs', 'HISTORY.txt'), '',
-
-    'Download',
-    '********', ''
+    read('CHANGES.rst'), '',
 )))
 
-open('doc.txt', 'w').write(long_description)
 
 name = 'plone.app.transmogrifier'
 setup(

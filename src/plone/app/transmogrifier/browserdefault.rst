@@ -1,5 +1,5 @@
 Browser default section
-=======================
+-----------------------
 
 A browser default pipeline section sets the default-page on a folder, and the
 layout template on content objects. They are the Transmogrifier equivalent of
