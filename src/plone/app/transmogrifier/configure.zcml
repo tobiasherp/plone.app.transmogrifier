@@ -26,6 +26,11 @@
       />
 
   <utility
+      component=".datesupdater.DatesUpdater"
+      name="plone.app.transmogrifier.datesupdater"
+      />
+
+  <utility
       component=".pathfixer.PathFixer"
       name="plone.app.transmogrifier.pathfixer"
       />

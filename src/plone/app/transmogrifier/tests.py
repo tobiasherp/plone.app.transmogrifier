@@ -542,6 +542,76 @@ def pathfixerSetUp(test):
                    name=u'plone.app.transmogrifier.tests.schemasource')
 
 
+def datesupdaterSetUp(test):
+    sectionsSetUp(test)
+
+    class MockPortal(MockObjectManager):
+
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
+            if path[0] == '/':
+                return False  # path is absolute
+            if isinstance(path, unicode):
+                return False
+            if path == 'not/existing/bar':
+                return False
+            return True
+
+        updated = []
+
+        @property
+        def creation_date(self):
+            return DateTime()
+
+        @creation_date.setter
+        def creation_date(self, val):
+            self.updated.append((self._last_path[0], 'creation_date', val))
+
+        @property
+        def modification_date(self):
+            return DateTime()
+
+        @modification_date.setter
+        def modification_date(self, val):
+            self.updated.append((self._last_path[0], 'modification_date', val))
+
+    test.globs['plone'] = MockPortal()
+    test.globs['transmogrifier'].context = test.globs['plone']
+
+    class SchemaSource(SampleSource):
+        classProvides(ISectionBlueprint)
+        implements(ISection)
+
+        def __init__(self, *args, **kw):
+            super(SchemaSource, self).__init__(*args, **kw)
+            self.sample = (
+                dict(
+                    _path='/spam/eggs/foo',
+                    creation_date=DateTime(2010, 10, 10),
+                    modification_date=DateTime(2012, 12, 12),
+                ),
+                dict(  # only creation date updated
+                    _path='/spam/eggs/bar',
+                    creation_date=DateTime(2010, 10, 10),
+                ),
+                dict(  # only modification date updated
+                    _path='/spam/eggs/baz',
+                    modification_date=DateTime(2012, 12, 12),
+                ),
+                dict(  # Should not be updated, not an existing path
+                    _path='not/existing/bar',
+                    creation_date=DateTime(2010, 10, 10),
+                    modification_date=DateTime(2012, 12, 12),
+                ),
+                dict(  # Should not be updated, no path
+                    creation_date=DateTime(2010, 10, 10),
+                    modification_date=DateTime(2012, 12, 12),
+                )
+            )
+    provideUtility(SchemaSource,
+                   name=u'plone.app.transmogrifier.tests.schemasource')
+
+
 def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
@@ -588,4 +658,8 @@ def test_suite():
             'pathfixer.rst',
             optionflags=optionflags,
             setUp=pathfixerSetUp, tearDown=tearDown),
+        doctest.DocFileSuite(
+            'datesupdater.rst',
+            optionflags=optionflags,
+            setUp=datesupdaterSetUp, tearDown=tearDown),
     ))

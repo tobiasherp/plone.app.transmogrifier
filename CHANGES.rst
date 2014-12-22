@@ -4,6 +4,10 @@ Changelog
 1.3 (unreleased)
 ----------------
 
+- Add datesupdater section to set creation_date and modification_date on
+  objects.
+  [thet]
+
 - Add pathfixer section to remove/prepend parts of the path.
   [thet]
 

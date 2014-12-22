@@ -16,6 +16,7 @@ long_description = ('\n'.join((
     read('src', 'plone', 'app', 'transmogrifier', 'atschemaupdater.rst'), '',
     read('src', 'plone', 'app', 'transmogrifier', 'browserdefault.rst'), '',
     read('src', 'plone', 'app', 'transmogrifier', 'criteria.rst'), '',
+    read('src', 'plone', 'app', 'transmogrifier', 'datesupdater.rst'), '',
     read('src', 'plone', 'app', 'transmogrifier', 'mimeencapsulator.rst'), '',
     read('src', 'plone', 'app', 'transmogrifier', 'pathfixer.rst'), '',
     read('src', 'plone', 'app', 'transmogrifier', 'portaltransforms.rst'), '',
