@@ -524,6 +524,24 @@ def redirectorSetUp(test):
                    provides=interfaces.IRedirectionStorage)
 
 
+def pathfixerSetUp(test):
+    sectionsSetUp(test)
+
+    class SchemaSource(SampleSource):
+        classProvides(ISectionBlueprint)
+        implements(ISection)
+
+        def __init__(self, *args, **kw):
+            super(SchemaSource, self).__init__(*args, **kw)
+            self.sample = (
+                dict(_path='/spam/eggs/foo'),
+                dict(_path='not/existing/bar'),
+                dict(_path='/spam/eggs/notatcontent'),
+            )
+    provideUtility(SchemaSource,
+                   name=u'plone.app.transmogrifier.tests.schemasource')
+
+
 def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
@@ -566,4 +584,8 @@ def test_suite():
             'redirector.txt',
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.REPORT_NDIFF,
             setUp=redirectorSetUp, tearDown=tearDown),
+        doctest.DocFileSuite(
+            'pathfixer.txt',
+            optionflags=optionflags,
+            setUp=pathfixerSetUp, tearDown=tearDown),
     ))

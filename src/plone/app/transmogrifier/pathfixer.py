@@ -15,7 +15,7 @@ class PathFixer(object):
     def __init__(self, transmogrifier, name, options, previous):
         """
         :param options['path-key']: The key, under the path can be found in
-                                    the item. Defaults to '_path'.
+                                    the item.
         :param options['stripstring']: A string to strip from the beginning of
                                        the path.
         :param options['prependstring']: A string to prepend on the beginning
