@@ -11,7 +11,7 @@ Blueprint name: ``plone.app.transmogrifier.pathfixer``
 Option path-key: The key of the item under which the path to be manipulated can
                  be found. E.g. ``_path``. 
 
-Option stripstring: A string to strip from the path value
+Option stripstring: A string to strip from the path value.
 
 Option prependstring: A string to append to the path value.
 
