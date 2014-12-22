@@ -535,8 +535,8 @@ def pathfixerSetUp(test):
             super(SchemaSource, self).__init__(*args, **kw)
             self.sample = (
                 dict(_path='/spam/eggs/foo'),
-                dict(_path='not/existing/bar'),
-                dict(_path='/spam/eggs/notatcontent'),
+                dict(_path='relative/path'),
+                dict(_path='/spam/eggs/another'),
             )
     provideUtility(SchemaSource,
                    name=u'plone.app.transmogrifier.tests.schemasource')

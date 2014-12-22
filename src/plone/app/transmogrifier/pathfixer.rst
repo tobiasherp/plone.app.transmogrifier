@@ -20,8 +20,8 @@ Look, here. Original path structure from
 plone.app.transmogrifier.tests.schemasource is::
 
     /spam/eggs/foo
-    not/existing/bar
-    /spam/eggs/notatcontent
+    relative/path
+    /spam/eggs/another
 
 
 Now lets manipulate it::
@@ -55,7 +55,7 @@ Now lets manipulate it::
     logger INFO
       subfolder/foo
     logger INFO
-      subfolder/not/existing/bar
+      subfolder/relative/path
     logger INFO
-      subfolder/notatcontent
+      subfolder/another
 
