@@ -53,12 +53,13 @@ class WorkflowUpdaterSection(object):
                             self.wftool.doActionFor(obj, action)
                         except WorkflowException:
                             pass
-                    history = obj.workflow_history
-                    for wf in history:
-                        for wf_state in history[wf]:
-                            if wf_state['review_state'] == state:
-                                wf_state['time'] = time
-                    obj.workflow_history = history
+                    history = getattr(obj, 'workflow_history', None)
+                    if history:
+                        for wf in history:
+                            for wf_state in history[wf]:
+                                if wf_state['review_state'] == state:
+                                    wf_state['time'] = time
+                        obj.workflow_history = history
                 else:
                     try:
                         self.wftool.doActionFor(obj, transition)

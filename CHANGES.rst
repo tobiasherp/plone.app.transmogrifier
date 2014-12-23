@@ -1,8 +1,12 @@
 Changelog
-========= 
+=========
 
 1.3 (unreleased)
 ----------------
+
+- Ignore if workflow_history is not available on objects when running the
+  workflowupdater blueprint.
+  [thet]
 
 - Add datesupdater section to set creation_date and modification_date on
   objects.
