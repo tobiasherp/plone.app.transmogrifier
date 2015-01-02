@@ -32,7 +32,7 @@ Changelog
   archetype fields.
   [elioschmutz]
 
-- Add a section to manage `plone.app.redirector`_ and to use it to
+- Add a section to manage `plone.app.redirector` and to use it to
   update paths.
   [rpatterson]
 

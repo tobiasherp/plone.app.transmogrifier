@@ -32,64 +32,75 @@ Optionally, you can specify a ``condition`` option, again a TALES expression,
 that when evaluating to ``False``, causes the section to skip encapsulation
 for  that item.
 
->>> encapsulator = """
-... [transmogrifier]
-... pipeline =
-...     source
-...     encapsulator
-...     conditionalencapsulator
-...     printer
-...
-... [source]
-... blueprint = plone.app.transmogrifier.tests.encapsulatorsource
-...
-... [encapsulator]
-... blueprint = plone.app.transmogrifier.mimeencapsulator
-... # Read the mimetype from the item
-... mimetype = item/_mimetype
-... field = string:datafield
-...
-... [conditionalencapsulator]
-... blueprint = plone.app.transmogrifier.mimeencapsulator
-... data-key = portrait
-... mimetype = python:item.get('_%s_mimetype' % key)
-... # replace the data in-place
-... field = key
-... condition = mimetype
-... 
-... [printer]
-... blueprint = plone.app.transmogrifier.tests.ofsfileprinter
-... """
->>> registerConfig(u'plone.app.transmogrifier.tests.encapsulator',
-...                encapsulator)
->>> transmogrifier(u'plone.app.transmogrifier.tests.encapsulator')
-datafield: (application/x-test-data) foobarbaz
-portrait: (image/jpeg) someportraitdata
+::
+
+    >>> encapsulator = """
+    ... [transmogrifier]
+    ... pipeline =
+    ...     source
+    ...     encapsulator
+    ...     conditionalencapsulator
+    ...     printer
+    ...
+    ... [source]
+    ... blueprint = plone.app.transmogrifier.tests.encapsulatorsource
+    ...
+    ... [encapsulator]
+    ... blueprint = plone.app.transmogrifier.mimeencapsulator
+    ... # Read the mimetype from the item
+    ... mimetype = item/_mimetype
+    ... field = string:datafield
+    ...
+    ... [conditionalencapsulator]
+    ... blueprint = plone.app.transmogrifier.mimeencapsulator
+    ... data-key = portrait
+    ... mimetype = python:item.get('_%s_mimetype' % key)
+    ... # replace the data in-place
+    ... field = key
+    ... condition = mimetype
+    ... 
+    ... [printer]
+    ... blueprint = plone.app.transmogrifier.tests.ofsfileprinter
+    ... """
+    >>> registerConfig(u'plone.app.transmogrifier.tests.encapsulator',
+    ...                encapsulator)
+    >>> transmogrifier(u'plone.app.transmogrifier.tests.encapsulator')
+    datafield: (application/x-test-data) foobarbaz
+    portrait: (image/jpeg) someportraitdata
+
 
 The ``field`` expression has access to the following:
 
-------------------- ----------------------------------------------------------
- ``item``            the current pipeline item
- ``key``             the name of the matched data key
- ``match``           if the key was matched by a regular expression, the match
-                     object, otherwise boolean True
- ``transmogrifier``  the transmogrifier
- ``name``            the name of the splitter section
- ``options``         the splitter options
- ``modules``         sys.modules
-------------------- ----------------------------------------------------------
+``item``
+    The current pipeline item
+
+``key``
+    The name of the matched data key
+
+``match``
+    If the key was matched by a regular expression, the match object, otherwise boolean True
+
+``transmogrifier``
+    The transmogrifier
+
+``name``
+    The name of the splitter section
+
+``options``
+    The splitter options
+
+``modules``
+    ``sys.modules``
+
 
 The ``mimetype`` expression has access to the same information as the ``field``
 expression, plus:
 
-------------------- ----------------------------------------------------------
-``field``            the name of the field in which the encapsulated data will
-                     be stored.
-------------------- ----------------------------------------------------------
+``field``
+    The name of the field in which the encapsulated data will be stored.
 
 The ``condition`` expression has access to the same information as the
 ``mimetype`` expression, plus:
 
-------------------- ----------------------------------------------------------
-``mimetype``         the mimetype used to encapsulate the data.
-------------------- ----------------------------------------------------------
+``mimetype``
+    The mimetype used to encapsulate the data.

@@ -28,6 +28,8 @@ use a ``re:`` or ``regexp:`` prefix to specify regular expressions).
 
 Paths to objects are always interpreted as relative to the context.
 
+::
+
     >>> import pprint
     >>> reindexobject = """
     ... [transmogrifier]

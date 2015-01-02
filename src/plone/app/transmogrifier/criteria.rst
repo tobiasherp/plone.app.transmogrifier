@@ -26,7 +26,9 @@ which should be a list of keys to try (one key per line, use a ``re:`` or
 ``regexp:`` prefix to specify regular expressions).
 
 Paths to objects are always interpreted as relative to the context, and must
-resolve to IATTopic classes. 
+resolve to IATTopic classes.
+
+::
 
     >>> import pprint
     >>> criteria = """

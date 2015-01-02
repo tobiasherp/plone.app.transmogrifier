@@ -29,6 +29,8 @@ Paths to objects are always interpreted as relative to the context. Any
 writable field who's id matches a key in the current item will be updated with
 the corresponding value, using the field's mutator.
 
+::
+
     >>> import pprint
     >>> atschema = """
     ... [transmogrifier]

@@ -49,6 +49,8 @@ If the UID key is missing, the item will be skipped.
 Below is an example of a standard updater. The test uid source produces
 items with two keys: a path under ``_path`` and a UID string under ``_uid``.
 
+::
+
     >>> import pprint
     >>> atschema = """
     ... [transmogrifier]

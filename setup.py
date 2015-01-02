@@ -29,7 +29,7 @@ long_description = ('\n'.join((
 
     read('CHANGES.rst'), '',
 )))
-
+open('compiled-doc.rst', 'w').write(long_description)
 
 name = 'plone.app.transmogrifier'
 setup(
