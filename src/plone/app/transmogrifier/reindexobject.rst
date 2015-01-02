@@ -1,5 +1,5 @@
 Indexing section
-===================
+----------------
 
 A ReindexObject section allows you to reindex an existing object in the
 portal_catalog. ReindexObject sections operate on objects already present in the
@@ -27,6 +27,8 @@ Alternatively, you can specify what key to use for the path by specifying the
 use a ``re:`` or ``regexp:`` prefix to specify regular expressions).
 
 Paths to objects are always interpreted as relative to the context.
+
+::
 
     >>> import pprint
     >>> reindexobject = """

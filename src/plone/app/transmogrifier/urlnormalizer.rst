@@ -1,13 +1,17 @@
 URL Normalizer section
-======================
+----------------------
 
-A URLNormalizer section allows you to parse any piece of text into a url-safe string which is then assigned to a specified key. It uses plone.i18n.normalizer to perform the normalization. The url normalizer section blueprint name is
-	``plone.app.transmogrifier.urlnormalizer``.
+A URLNormalizer section allows you to parse any piece of text into a url-safe
+string which is then assigned to a specified key. It uses plone.i18n.normalizer
+to perform the normalization. The url normalizer section blueprint name is
+``plone.app.transmogrifier.urlnormalizer``.
 
 The URL normalizer accepts the following optional keys -
 ``source-key``: The name of the object key that you wish to normalize,
 ``destination-key``: Where you want the normalized string to be stored,
 ``locale``: if you want the normalizer to be aware of locale, use this.
+
+::
 
     >>> import pprint
     >>> urlnormalizer = """
@@ -51,9 +55,14 @@ The URL normalizer accepts the following optional keys -
     logger INFO
       {'language': 'my language is en'}
 
-As you can see, only items containing the specified source-key have been processed, the others have been ignored and yielded without change.
+As you can see, only items containing the specified source-key have been
+processed, the others have been ignored and yielded without change.
 
-Destination-key and locale accept TALES expressions, so for example you could set your destination-key based on your locale element, which is in turn derived from your source-key:
+Destination-key and locale accept TALES expressions, so for example you could
+set your destination-key based on your locale element, which is in turn derived
+from your source-key:
+
+::
 
     >>> import pprint
     >>> urlnormalizer = """
@@ -97,12 +106,18 @@ Destination-key and locale accept TALES expressions, so for example you could se
     logger INFO
       {'en': 'my-language-is-en', 'language': 'my language is en'}
 
-In this case only items containing the 'language' key have been processed, and the destination-key has been set to the same value as the locale was. This is more to illuminate the fact that the locale was set, rather than providing a sensible use-case for destination-key.
+In this case only items containing the 'language' key have been processed, and
+the destination-key has been set to the same value as the locale was. This is
+more to illuminate the fact that the locale was set, rather than providing a
+sensible use-case for destination-key.
 
-If ZERO options are specified, the normalizer falls back to a set of default values as follows:
+If ZERO options are specified, the normalizer falls back to a set of default
+values as follows:
 ``source-key``: title,
 ``locale``: en,
 ``destination-key``: _id
+
+::
 
     >>> import pprint
     >>> urlnormalizer = """
@@ -145,6 +160,10 @@ If ZERO options are specified, the normalizer falls back to a set of default val
     logger INFO
       {'language': 'my language is en'}
 
-In this case, the destination-key is set to a controller variable, like _path, as it is expected that the newly formed Id will in most cases be used further down the pipeline in constructing the full, final path to the new Plone object.
+In this case, the destination-key is set to a controller variable, like _path,
+as it is expected that the newly formed Id will in most cases be used further
+down the pipeline in constructing the full, final path to the new Plone object.
 
-It should be noted that this section can effectively transform *any* section of text and turn it into a normalized, web safe string (max 255 chars) This string does not necessarily need to be used for a URL.
+It should be noted that this section can effectively transform *any* section of
+text and turn it into a normalized, web safe string (max 255 chars) This string
+does not necessarily need to be used for a URL.

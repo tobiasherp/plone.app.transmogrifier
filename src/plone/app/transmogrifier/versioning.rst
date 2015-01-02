@@ -1,8 +1,10 @@
 Disable / enable versioning sections
-====================================
+------------------------------------
 
 It can be helpful to disable versioning during content construction to avoid
-storing incomplete versions in the content item's revision history. For example::
+storing incomplete versions in the content item's revision history.
+
+For example::
 
     [transmogrifier]
     pipeline =

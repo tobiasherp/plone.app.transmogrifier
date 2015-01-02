@@ -1,14 +1,14 @@
-from zope import event
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
+from Products.Archetypes.event import ObjectEditedEvent
+from Products.Archetypes.event import ObjectInitializedEvent
+from Products.Archetypes.interfaces import IBaseObject
 from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import Matcher
 from collective.transmogrifier.utils import defaultKeys
 from collective.transmogrifier.utils import traverse
+from zope import event
+from zope.interface import classProvides, implements
 
-from Products.Archetypes.interfaces import IBaseObject
-from Products.Archetypes.event import ObjectInitializedEvent
-from Products.Archetypes.event import ObjectEditedEvent
 
 def _compare(fieldval, itemval):
     """Compare a AT Field value with an item value
@@ -25,11 +25,20 @@ def _compare(fieldval, itemval):
 
 
 def get(field, obj):
-    return field.getAccessor(obj)()
+    if getattr(field, 'getAccessor', False):
+        return field.getAccessor(obj)()
+    elif field.accessor is not None:
+        return getattr(obj, field.accessor)()
+    return field.get(obj)
 
 
 def set(field, obj, val):
-    field.getMutator(obj)(val)
+    if getattr(field, 'getMutator', False):
+        field.getMutator(obj)(val)
+    elif field.mutator is not None:
+        getattr(obj, field.mutator)(val)
+    else:
+        field.set(obj, val)
 
 
 class ATSchemaUpdaterSection(object):
@@ -51,18 +60,20 @@ class ATSchemaUpdaterSection(object):
             pathkey = self.pathkey(*item.keys())[0]
 
             if not pathkey:         # not enough info
-                yield item; continue
+                yield item
+                continue
 
             path = item[pathkey]
 
             obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None:         # path doesn't exist
-                yield item; continue
+                yield item
+                continue
 
             if IBaseObject.providedBy(obj):
                 changed = False
                 is_new_object = obj.checkCreationFlag()
-                for k,v in item.iteritems():
+                for k, v in item.iteritems():
                     if k.startswith('_'):
                         continue
                     field = obj.getField(k)

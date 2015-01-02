@@ -1,25 +1,22 @@
+from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.utils import Condition
+from collective.transmogrifier.utils import defaultKeys, defaultMatcher
+from collective.transmogrifier.utils import pathsplit
+from collective.transmogrifier.utils import traverse
+from plone.app.redirector.interfaces import IRedirectionStorage
+from zope.component import queryUtility
+from zope.interface import classProvides, implements
+import logging
 import posixpath
 import urlparse
-import logging
+
 
 from xml.etree.ElementTree import Element
 try:
     from lxml.etree import ElementBase
 except ImportError:
-    ElementBase  # pyflakes
     ElementBase = Element
-
-from zope.interface import classProvides, implements
-from zope.component import queryUtility
-
-from plone.app.redirector.interfaces import IRedirectionStorage
-
-from collective.transmogrifier.interfaces import ISectionBlueprint
-from collective.transmogrifier.interfaces import ISection
-from collective.transmogrifier.utils import defaultKeys, defaultMatcher
-from collective.transmogrifier.utils import Condition
-from collective.transmogrifier.utils import pathsplit
-from collective.transmogrifier.utils import traverse
 
 
 class RedirectorSection(object):
@@ -145,10 +142,10 @@ class RedirectorSection(object):
                         self.context_path,
                         str(old_path).lstrip('/')).rstrip('/')
                     if (old_path and old_path != new_path
-                        # Avoid recursive redirects
-                        and not new_path.startswith(old_path + '/')
-                        and not storage.has_path(old_path)
-                        and traverse(self.context, old_path) is None):
+                            # Avoid recursive redirects
+                            and not new_path.startswith(old_path + '/')
+                            and not storage.has_path(old_path)
+                            and traverse(self.context, old_path) is None):
                         self.logger.debug('Adding %r redirect: %r => %r',
                                           pathkey, old_path, new_path)
                         storage.add(old_path, new_path)

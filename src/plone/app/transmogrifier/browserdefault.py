@@ -1,10 +1,8 @@
-from zope.interface import classProvides, implements
-
+from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from collective.transmogrifier.interfaces import ISection, ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
 from collective.transmogrifier.utils import traverse
-
-from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
+from zope.interface import classProvides, implements
 
 
 class BrowserDefaultSection(object):
@@ -24,7 +22,8 @@ class BrowserDefaultSection(object):
         for item in self.previous:
             pathkey = self.pathkey(*item.keys())[0]
             if not pathkey:
-                yield item; continue
+                yield item
+                continue
 
             layoutkey = self.layoutkey(*item.keys())[0]
             defaultpagekey = self.defaultpagekey(*item.keys())[0]
@@ -33,10 +32,12 @@ class BrowserDefaultSection(object):
 
             obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None:
-                yield item; continue
+                yield item
+                continue
 
             if not ISelectableBrowserDefault.providedBy(obj):
-                yield item; continue
+                yield item
+                continue
 
             if layoutkey:
                 layout = item[layoutkey]

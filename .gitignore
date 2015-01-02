@@ -3,9 +3,10 @@
 *.pyc
 .installed.cfg
 .mr.developer.cfg
+compiled-doc.rst
 bin/
 develop-eggs/
+dist/
 eggs/
 parts/
 var/
-doc.txt

@@ -1,5 +1,5 @@
 Portal Transforms section
-=========================
+-------------------------
 
 A portal transforms pipeline section lets you use Portal Transforms to
 transform item values. The portal transforms section blueprint name is
@@ -20,6 +20,8 @@ the original item value is used to determine one.
 Also optional is the ``condition`` option, which lets you specify a TALES
 expression that when evaluating to False will prevent any transformations from
 happening. The condition is evaluated for every matched key.
+
+::
 
     >>> ptransforms = """
     ... [transmogrifier]
@@ -74,13 +76,23 @@ happening. The condition is evaluated for every matched key.
 
 The ``condition`` expression has access to the following:
 
-=================== ==========================================================
- ``item``            the current pipeline item
- ``key``             the name of the matched key
- ``match``           if the key was matched by a regular expression, the match
-                     object, otherwise boolean True
- ``transmogrifier``  the transmogrifier
- ``name``            the name of the splitter section
- ``options``         the splitter options
- ``modules``         sys.modules
-=================== ==========================================================
+``item``
+    The current pipeline item
+
+``key``
+    The name of the matched key
+
+``match``
+    If the key was matched by a regular expression, the match object, otherwise boolean True
+
+``transmogrifier``
+    The transmogrifier
+
+``name``
+    The name of the splitter section
+
+``options``
+    The splitter options
+
+``modules``
+    ``sys.modules``

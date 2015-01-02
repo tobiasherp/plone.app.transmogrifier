@@ -1,11 +1,9 @@
-from zope.interface import classProvides, implements
-
+from Acquisition import aq_base
+from Products.ATContentTypes.interface import IATTopic
 from collective.transmogrifier.interfaces import ISection, ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
 from collective.transmogrifier.utils import traverse
-
-from Acquisition import aq_base
-from Products.ATContentTypes.interface import IATTopic
+from zope.interface import classProvides, implements
 
 
 class CriterionAdder(object):
@@ -25,21 +23,25 @@ class CriterionAdder(object):
         for item in self.previous:
             pathkey = self.pathkey(*item.keys())[0]
             if not pathkey:
-                yield item; continue
+                yield item
+                continue
 
             criterionkey = self.criterionkey(*item.keys())[0]
             if not criterionkey:
-                yield item; continue
+                yield item
+                continue
 
             fieldkey = self.fieldkey(*item.keys())[0]
             if not fieldkey:
-                yield item; continue
+                yield item
+                continue
 
             path = item[pathkey]
 
             obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None:         # path doesn't exist
-                yield item; continue
+                yield item
+                continue
 
             criterion = item[criterionkey]
             field = item[fieldkey]

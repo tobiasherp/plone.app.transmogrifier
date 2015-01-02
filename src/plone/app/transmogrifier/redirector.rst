@@ -1,8 +1,10 @@
 Redirector section
-==================
+------------------
 
-A redirector section uses `plone.app.redirector`_ to manage redirects
-and update paths in keys.
+A redirector section uses `plone.app.redirector` to manage redirects and update
+paths in keys.
+
+::
 
     >>> import pprint
     >>> redirector = """

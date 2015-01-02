@@ -3,72 +3,84 @@
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     i18n_domain="plone.app.transmogrifier">
 
-<utility
-    component=".atschemaupdater.ATSchemaUpdaterSection"
-    name="plone.app.transmogrifier.atschemaupdater"
-    />
+  <include package="collective.transmogrifier" file="meta.zcml" />
 
-<utility
-    component=".workflowupdater.WorkflowUpdaterSection"
-    name="plone.app.transmogrifier.workflowupdater"
-    />
+  <utility
+      component=".atschemaupdater.ATSchemaUpdaterSection"
+      name="plone.app.transmogrifier.atschemaupdater"
+      />
 
-<utility
-    component=".browserdefault.BrowserDefaultSection"
-    name="plone.app.transmogrifier.browserdefault"
-    />
+  <utility
+      component=".workflowupdater.WorkflowUpdaterSection"
+      name="plone.app.transmogrifier.workflowupdater"
+      />
 
-<utility
-    component=".criteria.CriterionAdder"
-    name="plone.app.transmogrifier.criterionadder"
-    />
+  <utility
+      component=".browserdefault.BrowserDefaultSection"
+      name="plone.app.transmogrifier.browserdefault"
+      />
 
-<utility
-    component=".portaltransforms.PortalTransformsSection"
-    name="plone.app.transmogrifier.portaltransforms"
-    />
+  <utility
+      component=".criteria.CriterionAdder"
+      name="plone.app.transmogrifier.criterionadder"
+      />
 
-<utility
-    component=".urlnormalizer.URLNormalizerSection"
-    name="plone.app.transmogrifier.urlnormalizer"
-    />
+  <utility
+      component=".datesupdater.DatesUpdater"
+      name="plone.app.transmogrifier.datesupdater"
+      />
 
-<utility
-    component=".mimeencapsulator.MimeEncapsulatorSection"
-    name="plone.app.transmogrifier.mimeencapsulator"
-    />
+  <utility
+      component=".pathfixer.PathFixer"
+      name="plone.app.transmogrifier.pathfixer"
+      />
 
-<utility
-    component=".uidupdater.UIDUpdaterSection"
-    name="plone.app.transmogrifier.uidupdater"
-    />
+  <utility
+      component=".portaltransforms.PortalTransformsSection"
+      name="plone.app.transmogrifier.portaltransforms"
+      />
 
-<utility
-    component=".reindexobject.ReindexObjectSection"
-    name="plone.app.transmogrifier.reindexobject"
-    />
+  <utility
+      component=".urlnormalizer.URLNormalizerSection"
+      name="plone.app.transmogrifier.urlnormalizer"
+      />
 
-<utility
-    component=".versioning.DisableVersioningSection"
-    name="plone.app.transmogrifier.versioning.disable"
-    />
+  <utility
+      component=".mimeencapsulator.MimeEncapsulatorSection"
+      name="plone.app.transmogrifier.mimeencapsulator"
+      />
 
-<utility
-    component=".versioning.EnableVersioningSection"
-    name="plone.app.transmogrifier.versioning.enable"
-    />
+  <utility
+      component=".uidupdater.UIDUpdaterSection"
+      name="plone.app.transmogrifier.uidupdater"
+      />
 
-<utility
-    component=".redirector.RedirectorSection"
-    name="plone.app.transmogrifier.redirector"
-    />
+  <utility
+      component=".reindexobject.ReindexObjectSection"
+      name="plone.app.transmogrifier.reindexobject"
+      />
 
-<transmogrifier:registerConfig
-    name="plone.app.transmogrifier.xmlwalker"
-    title="Web Site Importer"
-    description="Import a web site by crawling it's links and
-                 extracting field and other values."
-    configuration="xmlwalker.cfg"
-    />
+  <utility
+      component=".versioning.DisableVersioningSection"
+      name="plone.app.transmogrifier.versioning.disable"
+      />
+
+  <utility
+      component=".versioning.EnableVersioningSection"
+      name="plone.app.transmogrifier.versioning.enable"
+      />
+
+  <utility
+      component=".redirector.RedirectorSection"
+      name="plone.app.transmogrifier.redirector"
+      />
+
+  <transmogrifier:registerConfig
+      name="plone.app.transmogrifier.xmlwalker"
+      title="Web Site Importer"
+      description="Import a web site by crawling it's links and
+                   extracting field and other values."
+      configuration="xmlwalker.cfg"
+      />
 
 </configure>

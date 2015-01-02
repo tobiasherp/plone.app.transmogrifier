@@ -1,6 +1,6 @@
-*******************************
+===============================
 Plone transmogrifier blueprints
-*******************************
+===============================
 
 .. contents::
 
@@ -8,12 +8,12 @@ This package contains several blueprints for collective.transmogrifier
 pipelines, commonly used to import content into a Plone site.
 
 Installation
-************
+============
 
-See docs/INSTALL.txt for installation instructions.
+See docs/INSTALL.rst for installation instructions.
 
 Credits
-*******
+=======
 
 Development sponsored by
     Elkjøp Nordic AS

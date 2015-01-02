@@ -1,17 +1,15 @@
-from zope.interface import classProvides, implements
-from zope.annotation.interfaces import IAnnotations
-
-from collective.transmogrifier.interfaces import ISectionBlueprint
-from collective.transmogrifier.interfaces import ISection
-
 from Products.CMFCore.utils import getToolByName
+from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from zope.annotation.interfaces import IAnnotations
+from zope.interface import classProvides, implements
 
 VERSIONABLE_KEY = 'plone.app.transmogrifier.versioning:versionable'
 
 
 class BaseVersioningSection(object):
     implements(ISection)
-    
+
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
@@ -36,18 +34,19 @@ class BaseVersioningSection(object):
 
 class DisableVersioningSection(BaseVersioningSection):
     classProvides(ISectionBlueprint)
-    
+
     def __iter__(self):
         for item in self.previous:
             # http://stackoverflow.com/questions/2339358/workaround-for-python-2-4s-yield-not-allowed-in-try-block-with-finally-clause
-            #try:
+            # try:
             #    self.save()
             #    self.clear()
             #    yield item
-            #finally:
+            # finally:
             #    self.restore()
 
-            # XXX I'm not entirely sure if the code below does the same thing as the code above. [aclark]
+            # XXX I'm not entirely sure if the code below does the same thing
+            # as the code above. [aclark]
             try:
                 self.save()
                 self.clear()
@@ -56,9 +55,10 @@ class DisableVersioningSection(BaseVersioningSection):
                 self.restore()
             self.restore()
 
+
 class EnableVersioningSection(BaseVersioningSection):
     classProvides(ISectionBlueprint)
-    
+
     def __iter__(self):
         for item in self.previous:
             self.restore()

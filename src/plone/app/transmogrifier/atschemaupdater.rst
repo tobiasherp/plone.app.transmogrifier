@@ -1,5 +1,5 @@
 ATSchema updater section
-========================
+------------------------
 
 An AT schema updater pipeline section is another important transmogrifier
 content import pipeline element. It updates field values for Archetypes
@@ -28,6 +28,8 @@ expressions).
 Paths to objects are always interpreted as relative to the context. Any
 writable field who's id matches a key in the current item will be updated with
 the corresponding value, using the field's mutator.
+
+::
 
     >>> import pprint
     >>> atschema = """

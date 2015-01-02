@@ -1,5 +1,5 @@
 Browser default section
-=======================
+-----------------------
 
 A browser default pipeline section sets the default-page on a folder, and the
 layout template on content objects. They are the Transmogrifier equivalent of
@@ -38,6 +38,8 @@ names, from
 The defaultpage key will set the id of the default page that should be 
 presented when the content object is loaded, and the layout key will set the
 id of the layout to use for the content item.
+
+::
 
     >>> import pprint
     >>> browserdefault = """

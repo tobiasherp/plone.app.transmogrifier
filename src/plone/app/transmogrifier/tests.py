@@ -1,23 +1,22 @@
-import posixpath
-import unittest
 from DateTime.DateTime import DateTime
+from Products.Five import zcml
+from collective.transmogrifier.interfaces import ISectionBlueprint, ISection
+from collective.transmogrifier.sections.tests import MockObjectManager
+from collective.transmogrifier.sections.tests import SampleSource
+from collective.transmogrifier.sections.tests import _marker
+from collective.transmogrifier.sections.tests import sectionsSetUp as ctSectionsSetup  # noqa
+from collective.transmogrifier.tests import tearDown
 from zope.component import provideUtility
 from zope.interface import classProvides, implements
 from zope.testing import doctest
-from collective.transmogrifier.interfaces import ISectionBlueprint, ISection
-from collective.transmogrifier.tests import tearDown
-from collective.transmogrifier.sections.tests import sectionsSetUp
-from collective.transmogrifier.sections.tests import SampleSource
-from collective.transmogrifier.sections.tests import MockObjectManager
-from collective.transmogrifier.sections.tests import _marker
-
-from Products.Five import zcml
+import posixpath
+import unittest
 
 # Doctest support
 
 optionflags = doctest.REPORT_NDIFF
 
-ctSectionsSetup = sectionsSetUp
+
 def sectionsSetUp(test):
     ctSectionsSetup(test)
     import plone.app.transmogrifier
@@ -26,19 +25,21 @@ def sectionsSetUp(test):
 
 class MockObjectManager(MockObjectManager):
 
-        def _getOb(self, id_, default=_marker):
-            obj = super(MockObjectManager, self)._getOb(id_, default=default)
-            if getattr(obj, '_path', '').endswith('/notatcontent'):
-                return object()
-            return obj
+    def _getOb(self, id_, default=_marker):
+        obj = super(MockObjectManager, self)._getOb(id_, default=default)
+        if getattr(obj, '_path', '').endswith('/notatcontent'):
+            return object()
+        return obj
 
 
 def portalTransformsSetUp(test):
     sectionsSetUp(test)
 
     class MockPortalTransforms(object):
+
         def __call__(self, transform, data):
             return 'Transformed %r using the %s transform' % (data, transform)
+
         def convertToData(self, target, data, mimetype=None):
             if mimetype is not None:
                 return 'Transformed %r from %s to %s' % (
@@ -46,6 +47,7 @@ def portalTransformsSetUp(test):
             else:
                 return 'Transformed %r to %s' % (data, target)
     test.globs['plone'].portal_transforms = MockPortalTransforms()
+
 
 def aTSchemaUpdaterSetUp(test):
     sectionsSetUp(test)
@@ -136,7 +138,8 @@ def aTSchemaUpdaterSetUp(test):
                      title='Should not be updated, not an AT base object'),
             )
     provideUtility(SchemaSource,
-        name=u'plone.app.transmogrifier.tests.schemasource')
+                   name=u'plone.app.transmogrifier.tests.schemasource')
+
 
 def workflowUpdaterSetUp(test):
     sectionsSetUp(test)
@@ -179,22 +182,40 @@ def workflowUpdaterSetUp(test):
         def __init__(self, *args, **kw):
             super(WorkflowSource, self).__init__(*args, **kw)
             self.sample = (
-                dict(_path='/spam/eggs/foo', _transitions='spam'),
-                dict(_path='/spam/eggs/baz', _transitions=('spam', 'eggs')),
-                dict(_path='not/existing/bar', _transitions=('spam', 'eggs'),
-                     title='Should not be updated, not an existing path'),
-                dict(_path='spam/eggs/incomplete',
-                     title='Should not be updated, no transitions'),
-                dict(_path='/spam/eggs/nosuchtransition',
-                     _transitions=('nonsuch',),
-                     title='Should not be updated, no such transition'),
-                dict(_path='/spam/eggs/bla', _transitions=(
-                        {'action': 'spam', 'review_state': 'spammed', 'time': DateTime("2014-06-20")},
-                    )
-                ),
+                dict(
+                    _path='/spam/eggs/foo',
+                    _transitions='spam'),
+                dict(
+                    _path='/spam/eggs/baz',
+                    _transitions=(
+                        'spam',
+                        'eggs')),
+                dict(
+                    _path='not/existing/bar',
+                    _transitions=(
+                        'spam',
+                        'eggs'),
+                    title='Should not be updated, not an existing path'),
+                dict(
+                    _path='spam/eggs/incomplete',
+                    title='Should not be updated, no transitions'),
+                dict(
+                    _path='/spam/eggs/nosuchtransition',
+                    _transitions=(
+                        'nonsuch',
+                    ),
+                    title='Should not be updated, no such transition'),
+                dict(
+                    _path='/spam/eggs/bla',
+                    _transitions=(
+                        {
+                            'action': 'spam',
+                            'review_state': 'spammed',
+                            'time': DateTime("2014-06-20")},
+                    )),
             )
     provideUtility(WorkflowSource,
-        name=u'plone.app.transmogrifier.tests.workflowsource')
+                   name=u'plone.app.transmogrifier.tests.workflowsource')
 
 
 def browserDefaultSetUp(test):
@@ -234,20 +255,35 @@ def browserDefaultSetUp(test):
         def __init__(self, *args, **kw):
             super(BrowserDefaultSource, self).__init__(*args, **kw)
             self.sample = (
-                dict(_path='/spam/eggs/foo', _layout='spam'),
-                dict(_path='/spam/eggs/bar', _defaultpage='eggs'),
-                dict(_path='/spam/eggs/baz', _layout='spam', _defaultpage='eggs'),
-                dict(_path='not/existing/bar', _layout='spam',
-                     title='Should not be updated, not an existing path'),
-                dict(_path='spam/eggs/incomplete',
-                     title='Should not be updated, no layout or defaultpage'),
-                dict(_path='spam/eggs/emptylayout', _layout='',
-                     title='Should not be updated, no layout or defaultpage'),
-                dict(_path='spam/eggs/emptydefaultpage', _defaultpage='',
-                     title='Should not be updated, no layout or defaultpage'),
+                dict(
+                    _path='/spam/eggs/foo',
+                    _layout='spam'),
+                dict(
+                    _path='/spam/eggs/bar',
+                    _defaultpage='eggs'),
+                dict(
+                    _path='/spam/eggs/baz',
+                    _layout='spam',
+                    _defaultpage='eggs'),
+                dict(
+                    _path='not/existing/bar',
+                    _layout='spam',
+                    title='Should not be updated, not an existing path'),
+                dict(
+                    _path='spam/eggs/incomplete',
+                    title='Should not be updated, no layout or defaultpage'),
+                dict(
+                    _path='spam/eggs/emptylayout',
+                    _layout='',
+                    title='Should not be updated, no layout or defaultpage'),
+                dict(
+                    _path='spam/eggs/emptydefaultpage',
+                    _defaultpage='',
+                    title='Should not be updated, no layout or defaultpage'),
             )
     provideUtility(BrowserDefaultSource,
-        name=u'plone.app.transmogrifier.tests.browserdefaultsource')
+                   name=u'plone.app.transmogrifier.tests.browserdefaultsource')
+
 
 def urlNormalizerSetUp(test):
     sectionsSetUp(test)
@@ -286,7 +322,8 @@ def urlNormalizerSetUp(test):
                 dict(language='my language is en')
             )
     provideUtility(URLNormalizerSource,
-        name=u'plone.app.transmogrifier.tests.urlnormalizersource')
+                   name=u'plone.app.transmogrifier.tests.urlnormalizersource')
+
 
 def criteriaSetUp(test):
     sectionsSetUp(test)
@@ -328,7 +365,8 @@ def criteriaSetUp(test):
                      title='Should not be updated, no criterion or field'),
             )
     provideUtility(CriteriaSource,
-        name=u'plone.app.transmogrifier.tests.criteriasource')
+                   name=u'plone.app.transmogrifier.tests.criteriasource')
+
 
 def mimeencapsulatorSetUp(test):
     sectionsSetUp(test)
@@ -347,10 +385,12 @@ def mimeencapsulatorSetUp(test):
                      _portrait_mimetype='image/jpeg'),
             )
     provideUtility(EncapsulatorSource,
-        name=u'plone.app.transmogrifier.tests.encapsulatorsource')
+                   name=u'plone.app.transmogrifier.tests.encapsulatorsource')
 
     from OFS.Image import File
+
     class OFSFilePrinter(object):
+
         """Prints out data on any OFS.Image.File object in the item"""
         classProvides(ISectionBlueprint)
         implements(ISection)
@@ -366,7 +406,8 @@ def mimeencapsulatorSetUp(test):
                             key, value.content_type, str(value))
                 yield item
     provideUtility(OFSFilePrinter,
-        name=u'plone.app.transmogrifier.tests.ofsfileprinter')
+                   name=u'plone.app.transmogrifier.tests.ofsfileprinter')
+
 
 def uidSetUp(test):
     sectionsSetUp(test)
@@ -408,15 +449,19 @@ def uidSetUp(test):
         def __init__(self, *args, **kw):
             super(UIDSource, self).__init__(*args, **kw)
             self.sample = (
-                dict(_path='/spam/eggs/foo',     _uid='abc',), # will be set
-                dict(_path='/spam/eggs/bar',     _uid='xyz',), # same as default
-                dict(_path='not/existing/bar',   _uid='def',), # not found
-                dict(                            _uid='geh',), # no path
-                dict(_path='/spam/eggs/baz',                ), # no uid
-                dict(_path='/spam/notatcontent', _uid='ijk',), # not referenceable
+                dict(_path='/spam/eggs/foo', _uid='abc',),  # will be set
+                dict(_path='/spam/eggs/bar', _uid='xyz',),  # same as default
+                dict(_path='not/existing/bar', _uid='def',),  # not found
+                dict(_uid='geh',),  # no path
+                dict(_path='/spam/eggs/baz',),  # no uid
+                dict(
+                    _path='/spam/notatcontent',
+                    _uid='ijk',
+                ),
+                # not referenceable
             )
     provideUtility(UIDSource,
-        name=u'plone.app.transmogrifier.tests.uidsource')
+                   name=u'plone.app.transmogrifier.tests.uidsource')
 
 
 def reindexObjectSetup(test):
@@ -459,16 +504,16 @@ def reindexObjectSetup(test):
         def __init__(self, *args, **kw):
             super(ReindexObjectSource, self).__init__(*args, **kw)
             self.sample = (
-                dict(_path='/spam/eggs/foo'), # will be set
-                dict(_path='/spam/eggs/bar'), # will be set
-                dict(_path='/spam/eggs/baz'), # will be set
+                dict(_path='/spam/eggs/foo'),  # will be set
+                dict(_path='/spam/eggs/bar'),  # will be set
+                dict(_path='/spam/eggs/baz'),  # will be set
                 dict(_path='not/a/catalog/aware/content',
                      title='Should not be reindexed, not a CMFCatalogAware content'),
                 dict(_path='not/existing/bar',
                      title='Should not be reindexed, not an existing path'),
             )
     provideUtility(ReindexObjectSource,
-        name=u'plone.app.transmogrifier.tests.reindexobjectsource')
+                   name=u'plone.app.transmogrifier.tests.reindexobjectsource')
 
 
 def redirectorSetUp(test):
@@ -479,46 +524,142 @@ def redirectorSetUp(test):
                    provides=interfaces.IRedirectionStorage)
 
 
+def pathfixerSetUp(test):
+    sectionsSetUp(test)
+
+    class SchemaSource(SampleSource):
+        classProvides(ISectionBlueprint)
+        implements(ISection)
+
+        def __init__(self, *args, **kw):
+            super(SchemaSource, self).__init__(*args, **kw)
+            self.sample = (
+                dict(_path='/spam/eggs/foo'),
+                dict(_path='relative/path'),
+                dict(_path='/spam/eggs/another'),
+            )
+    provideUtility(SchemaSource,
+                   name=u'plone.app.transmogrifier.tests.schemasource')
+
+
+def datesupdaterSetUp(test):
+    sectionsSetUp(test)
+
+    class MockPortal(MockObjectManager):
+
+        def hasObject(self, id_):
+            path = posixpath.join(self._path, id_)
+            if path[0] == '/':
+                return False  # path is absolute
+            if isinstance(path, unicode):
+                return False
+            if path == 'not/existing/bar':
+                return False
+            return True
+
+        updated = []
+
+        @property
+        def creation_date(self):
+            return DateTime()
+
+        @creation_date.setter
+        def creation_date(self, val):
+            self.updated.append((self._last_path[0], 'creation_date', val))
+
+        @property
+        def modification_date(self):
+            return DateTime()
+
+        @modification_date.setter
+        def modification_date(self, val):
+            self.updated.append((self._last_path[0], 'modification_date', val))
+
+    test.globs['plone'] = MockPortal()
+    test.globs['transmogrifier'].context = test.globs['plone']
+
+    class SchemaSource(SampleSource):
+        classProvides(ISectionBlueprint)
+        implements(ISection)
+
+        def __init__(self, *args, **kw):
+            super(SchemaSource, self).__init__(*args, **kw)
+            self.sample = (
+                dict(
+                    _path='/spam/eggs/foo',
+                    creation_date=DateTime(2010, 10, 10),
+                    modification_date=DateTime(2012, 12, 12),
+                ),
+                dict(  # only creation date updated
+                    _path='/spam/eggs/bar',
+                    creation_date=DateTime(2010, 10, 10),
+                ),
+                dict(  # only modification date updated
+                    _path='/spam/eggs/baz',
+                    modification_date=DateTime(2012, 12, 12),
+                ),
+                dict(  # Should not be updated, not an existing path
+                    _path='not/existing/bar',
+                    creation_date=DateTime(2010, 10, 10),
+                    modification_date=DateTime(2012, 12, 12),
+                ),
+                dict(  # Should not be updated, no path
+                    creation_date=DateTime(2010, 10, 10),
+                    modification_date=DateTime(2012, 12, 12),
+                )
+            )
+    provideUtility(SchemaSource,
+                   name=u'plone.app.transmogrifier.tests.schemasource')
+
+
 def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
-            'portaltransforms.txt',
+            'portaltransforms.rst',
             optionflags=optionflags,
             setUp=portalTransformsSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'atschemaupdater.txt',
+            'atschemaupdater.rst',
             optionflags=optionflags,
             setUp=aTSchemaUpdaterSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'uidupdater.txt',
+            'uidupdater.rst',
             optionflags=optionflags,
             setUp=uidSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'workflowupdater.txt',
+            'workflowupdater.rst',
             optionflags=optionflags,
             setUp=workflowUpdaterSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'browserdefault.txt',
+            'browserdefault.rst',
             optionflags=optionflags,
             setUp=browserDefaultSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'urlnormalizer.txt',
+            'urlnormalizer.rst',
             optionflags=optionflags,
             setUp=urlNormalizerSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'criteria.txt',
+            'criteria.rst',
             optionflags=optionflags,
             setUp=criteriaSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'mimeencapsulator.txt',
+            'mimeencapsulator.rst',
             optionflags=optionflags,
             setUp=mimeencapsulatorSetUp, tearDown=tearDown),
         doctest.DocFileSuite(
-            'reindexobject.txt',
+            'reindexobject.rst',
             optionflags=optionflags,
             setUp=reindexObjectSetup, tearDown=tearDown),
         doctest.DocFileSuite(
-            'redirector.txt',
+            'redirector.rst',
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.REPORT_NDIFF,
             setUp=redirectorSetUp, tearDown=tearDown),
+        doctest.DocFileSuite(
+            'pathfixer.rst',
+            optionflags=optionflags,
+            setUp=pathfixerSetUp, tearDown=tearDown),
+        doctest.DocFileSuite(
+            'datesupdater.rst',
+            optionflags=optionflags,
+            setUp=datesupdaterSetUp, tearDown=tearDown),
     ))
