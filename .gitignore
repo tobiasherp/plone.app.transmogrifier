@@ -6,6 +6,7 @@
 compiled-doc.rst
 bin/
 develop-eggs/
+dist/
 eggs/
 parts/
 var/
