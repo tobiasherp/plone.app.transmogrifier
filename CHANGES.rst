@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3 (unreleased)
+1.3 (2015-01-22)
 ----------------
 
 - Ignore if workflow_history is not available on objects when running the
