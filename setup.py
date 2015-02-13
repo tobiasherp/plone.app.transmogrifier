@@ -38,7 +38,13 @@ setup(
     description="Plone blueprints for collective.transmogrifier pipelines",
     long_description=long_description,
     classifiers=[
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
         "Framework :: Plone",
+        "Framework :: Plone :: 4.0",
+        "Framework :: Plone :: 4.1",
+        "Framework :: Plone :: 4.2",
+        "Framework :: Plone :: 4.3",
         "Framework :: Zope2",
         "Framework :: Zope3",
         "License :: OSI Approved :: GNU General Public License (GPL)",
@@ -59,6 +65,7 @@ setup(
     install_requires=[
         'setuptools',
         'collective.transmogrifier>=1.1',
+        'plone.uuid',
     ],
     entry_points="""
     # -*- Entry points: -*-
