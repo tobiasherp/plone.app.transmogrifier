@@ -491,8 +491,12 @@ def reindexObjectSetup(test):
 
         reindexed = []
 
-        def reindexObject(self, ob):
-            self.reindexed.append((self._last_path[0], 'reindexed'))
+        def reindexObject(self, ob, idxs=[]):
+            self.reindexed.append((
+                self._last_path[0],
+                'reindexed',
+                'indexes: {0}'.format('all' if not idxs else ', '.join(idxs)))
+            )
 
     test.globs['plone'] = MockPortal()
     test.globs['transmogrifier'].context = test.globs['plone']

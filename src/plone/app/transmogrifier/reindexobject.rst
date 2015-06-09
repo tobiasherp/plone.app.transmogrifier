@@ -31,7 +31,7 @@ Paths to objects are always interpreted as relative to the context.
 ::
 
     >>> import pprint
-    >>> reindexobject = """
+    >>> reindexobject_1 = """
     ... [transmogrifier]
     ... pipeline =
     ...     reindexobjectsource
@@ -48,9 +48,9 @@ Paths to objects are always interpreted as relative to the context.
     ... blueprint = collective.transmogrifier.sections.logger
     ... name = logger
     ... """
-    >>> registerConfig(u'plone.app.transmogrifier.tests.reindexobject', reindexobject)
+    >>> registerConfig(u'plone.app.transmogrifier.tests.reindexobject_1', reindexobject_1)
 
-    >>> transmogrifier(u'plone.app.transmogrifier.tests.reindexobject') 
+    >>> transmogrifier(u'plone.app.transmogrifier.tests.reindexobject_1')
     >>> print(handler)
     logger INFO
       {'_path': '/spam/eggs/foo'}
@@ -66,6 +66,81 @@ Paths to objects are always interpreted as relative to the context.
        'title': 'Should not be reindexed, not an existing path'}
 
     >>> pprint.pprint(plone.reindexed)
-    [('spam/eggs/foo', 'reindexed'),
-     ('spam/eggs/bar', 'reindexed'),
-     ('spam/eggs/baz', 'reindexed')]
+    [('spam/eggs/foo', 'reindexed', 'indexes: all'),
+     ('spam/eggs/bar', 'reindexed', 'indexes: all'),
+     ('spam/eggs/baz', 'reindexed', 'indexes: all')]
+
+    Reset:
+    >>> plone.reindexed = []
+
+
+
+Index only the ``foo`` index::
+
+    >>> import pprint
+    >>> reindexobject_2 = """
+    ... [transmogrifier]
+    ... pipeline =
+    ...     reindexobjectsource
+    ...     reindexobject
+    ...     printer
+    ...
+    ... [reindexobjectsource]
+    ... blueprint = plone.app.transmogrifier.tests.reindexobjectsource
+    ...
+    ... [reindexobject]
+    ... blueprint = plone.app.transmogrifier.reindexobject
+    ... indexes = foo
+    ...
+    ... [printer]
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
+    ... """
+    >>> registerConfig(u'plone.app.transmogrifier.tests.reindexobject_2', reindexobject_2)
+
+    >>> transmogrifier(u'plone.app.transmogrifier.tests.reindexobject_2')
+
+    >>> pprint.pprint(plone.reindexed)
+    [('spam/eggs/foo', 'reindexed', 'indexes: foo'),
+     ('spam/eggs/bar', 'reindexed', 'indexes: foo'),
+     ('spam/eggs/baz', 'reindexed', 'indexes: foo')]
+
+    Reset:
+    >>> plone.reindexed = []
+
+
+Index only the ``foo``, ``bar`` and ``baz`` indexes::
+
+    >>> import pprint
+    >>> reindexobject_3 = """
+    ... [transmogrifier]
+    ... pipeline =
+    ...     reindexobjectsource
+    ...     reindexobject
+    ...     printer
+    ...
+    ... [reindexobjectsource]
+    ... blueprint = plone.app.transmogrifier.tests.reindexobjectsource
+    ...
+    ... [reindexobject]
+    ... blueprint = plone.app.transmogrifier.reindexobject
+    ... indexes =
+    ...     foo
+    ...     bar
+    ...     baz
+    ...
+    ... [printer]
+    ... blueprint = collective.transmogrifier.sections.logger
+    ... name = logger
+    ... """
+    >>> registerConfig(u'plone.app.transmogrifier.tests.reindexobject_3', reindexobject_3)
+
+    >>> transmogrifier(u'plone.app.transmogrifier.tests.reindexobject_3')
+
+    >>> pprint.pprint(plone.reindexed)
+    [('spam/eggs/foo', 'reindexed', 'indexes: foo, bar, baz'),
+     ('spam/eggs/bar', 'reindexed', 'indexes: foo, bar, baz'),
+     ('spam/eggs/baz', 'reindexed', 'indexes: foo, bar, baz')]
+
+    Reset:
+    >>> plone.reindexed = []

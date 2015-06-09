@@ -4,7 +4,9 @@ Changelog
 1.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Support indexing of individual indexes for the
+  ``plone.app.transmogrifier.reindexobject`` blueprint.
+  [thet]
 
 
 1.3 (2015-01-22)

@@ -26,6 +26,7 @@ class ReindexObjectSection(object):
         self.verbose = options.get('verbose', '0').lower() in (
             '1', 'true', 'yes', 'on')
         self.counter = 0
+        self.indexes = [it for it in options.get('indexes', '').splitlines() if it]  # noqa
 
     def __iter__(self):
 
@@ -49,6 +50,10 @@ class ReindexObjectSection(object):
                 self.counter += 1
                 logger.info("Reindex object %s (%s)", path, self.counter)
 
-            self.portal_catalog.reindexObject(ob)  # update catalog
+            # update catalog
+            if self.indexes:
+                self.portal_catalog.reindexObject(ob, idxs=self.indexes)
+            else:
+                self.portal_catalog.reindexObject(ob)
 
             yield item
