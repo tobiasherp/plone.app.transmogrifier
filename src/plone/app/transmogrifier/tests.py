@@ -579,6 +579,22 @@ def datesupdaterSetUp(test):
         def modification_date(self, val):
             self.updated.append((self._last_path[0], 'modification_date', val))
 
+        @property
+        def effective_date(self):
+            return DateTime()
+
+        @effective_date.setter
+        def effective_date(self, val):
+            self.updated.append((self._last_path[0], 'effective_date', val))
+
+        @property
+        def expiration_date(self):
+            return DateTime()
+
+        @expiration_date.setter
+        def expiration_date(self, val):
+            self.updated.append((self._last_path[0], 'expiration_date', val))
+
     test.globs['plone'] = MockPortal()
     test.globs['transmogrifier'].context = test.globs['plone']
 
@@ -593,6 +609,8 @@ def datesupdaterSetUp(test):
                     _path='/spam/eggs/foo',
                     creation_date=DateTime('2010/10/10 UTC'),
                     modification_date=DateTime('2011/11/11 UTC'),
+                    effective_date=DateTime('2010/10/10 UTC'),
+                    expiration_date=DateTime('2012/12/12 UTC'),
                 ),
                 dict(  # only creation date updated
                     _path='/spam/eggs/bar',
@@ -602,14 +620,26 @@ def datesupdaterSetUp(test):
                     _path='/spam/eggs/baz',
                     modification_date=DateTime('2011/11/11 UTC'),
                 ),
+                dict(  # only effective date updated
+                    _path='/spam/eggs/qux',
+                    effective_date=DateTime('2010/10/10 UTC'),
+                ),
+                dict(  # only expiration date updated
+                    _path='/spam/eggs/norf',
+                    expiration_date=DateTime('2012/12/12 UTC'),
+                ),
                 dict(  # Should not be updated, not an existing path
                     _path='not/existing/bar',
                     creation_date=DateTime('2010/10/10 UTC'),
                     modification_date=DateTime('2011/11/11 UTC'),
+                    effective_date=DateTime('2010/10/10 UTC'),
+                    expiration_date=DateTime('2012/12/12 UTC'),
                 ),
                 dict(  # Should not be updated, no path
                     creation_date=DateTime('2010/10/10 UTC'),
                     modification_date=DateTime('2011/11/11 UTC'),
+                    effective_date=DateTime('2010/10/10 UTC'),
+                    expiration_date=DateTime('2012/12/12 UTC'),
                 )
             )
     provideUtility(SchemaSource,

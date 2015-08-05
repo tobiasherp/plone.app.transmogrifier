@@ -21,6 +21,10 @@ class DatesUpdater(object):
                                         creation_date.
         :param options['modification-key']: Modification date key. Defaults to
                                             modification_date.
+        :param options['effective-key']: Effective date key. Defaults to
+                                            effective_date.
+        :param options['expiration-key']: Expiration date key. Defaults to
+                                            expiration_date.
         """
         self.previous = previous
         self.context = transmogrifier.context
@@ -28,6 +32,8 @@ class DatesUpdater(object):
         self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
         self.creationkey = options.get('creation-key', 'creation_date')
         self.modificationkey = options.get('modification-key', 'modification_date')  # noqa
+        self.effectivekey = options.get('effective-key', 'effective_date')
+        self.expirationkey = options.get('expiration-key', 'expiration_date')
 
     def __iter__(self):
 
@@ -45,11 +51,19 @@ class DatesUpdater(object):
                 continue  # object not found
 
             creationdate = item.get(self.creationkey, None)
-            if creationdate and getattr(ob, 'creation_date', False):
+            if creationdate and hasattr(ob, 'creation_date'):
                 ob.creation_date = DateTime(creationdate)
 
             modificationdate = item.get(self.modificationkey, None)
-            if modificationdate and getattr(ob, 'modification_date', False):
+            if modificationdate and hasattr(ob, 'modification_date'):
                 ob.modification_date = DateTime(modificationdate)
+
+            effectivedate = item.get(self.effectivekey, None)
+            if effectivedate and hasattr(ob, 'effective_date'):
+                ob.effective_date = DateTime(effectivedate)
+
+            expirationdate = item.get(self.expirationkey, None)
+            if expirationdate and hasattr(ob, 'expiration_date'):
+                ob.expiration_date = DateTime(expirationdate)
 
             yield item

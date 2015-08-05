@@ -4,6 +4,11 @@ Changelog
 1.4 (unreleased)
 ----------------
 
+- Support updating effective and expiration dates on ``plone.app.transmogrifier.datesupdater`` blueprint.
+  Fix field discovering logic to avoid skipping the ones set as ``None``.
+  Fix documentation.
+  [hvelarde]
+
 - Support indexing of individual indexes for the
   ``plone.app.transmogrifier.reindexobject`` blueprint.
   [thet]
