@@ -591,25 +591,25 @@ def datesupdaterSetUp(test):
             self.sample = (
                 dict(
                     _path='/spam/eggs/foo',
-                    creation_date=DateTime(2010, 10, 10),
-                    modification_date=DateTime(2012, 12, 12),
+                    creation_date=DateTime('2010/10/10 UTC'),
+                    modification_date=DateTime('2011/11/11 UTC'),
                 ),
                 dict(  # only creation date updated
                     _path='/spam/eggs/bar',
-                    creation_date=DateTime(2010, 10, 10),
+                    creation_date=DateTime('2010/10/10 UTC'),
                 ),
                 dict(  # only modification date updated
                     _path='/spam/eggs/baz',
-                    modification_date=DateTime(2012, 12, 12),
+                    modification_date=DateTime('2011/11/11 UTC'),
                 ),
                 dict(  # Should not be updated, not an existing path
                     _path='not/existing/bar',
-                    creation_date=DateTime(2010, 10, 10),
-                    modification_date=DateTime(2012, 12, 12),
+                    creation_date=DateTime('2010/10/10 UTC'),
+                    modification_date=DateTime('2011/11/11 UTC'),
                 ),
                 dict(  # Should not be updated, no path
-                    creation_date=DateTime(2010, 10, 10),
-                    modification_date=DateTime(2012, 12, 12),
+                    creation_date=DateTime('2010/10/10 UTC'),
+                    modification_date=DateTime('2011/11/11 UTC'),
                 )
             )
     provideUtility(SchemaSource,

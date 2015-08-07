@@ -23,16 +23,16 @@ Option modification-key: The key for the modification date.
     ...     schemasource
     ...     datesupdater
     ...     logger
-    ...     
+    ...
     ... [schemasource]
     ... blueprint = plone.app.transmogrifier.tests.schemasource
-    ... 
+    ...
     ... [datesupdater]
     ... blueprint = plone.app.transmogrifier.datesupdater
     ... path-key = _path
     ... creation-key = creation_date
     ... modification-key = modification_date
-    ... 
+    ...
     ... [logger]
     ... blueprint = collective.transmogrifier.sections.logger
     ... name = logger
@@ -47,28 +47,28 @@ Print out the source structure::
     >>> print handler
     logger INFO
         {'_path': '/spam/eggs/foo',
-       'creation_date': DateTime('2010/10/10 00:00:00 GMT+2'),
-       'modification_date': DateTime('2012/12/12 00:00:00 GMT+1')}
+       'creation_date': DateTime('2010/10/10 00:00:00 UTC'),
+       'modification_date': DateTime('2011/11/11 00:00:00 UTC')}
     logger INFO
         {'_path': '/spam/eggs/bar',
-       'creation_date': DateTime('2010/10/10 00:00:00 GMT+2')}
+       'creation_date': DateTime('2010/10/10 00:00:00 UTC')}
     logger INFO
         {'_path': '/spam/eggs/baz',
-       'modification_date': DateTime('2012/12/12 00:00:00 GMT+1')}
+       'modification_date': DateTime('2011/11/11 00:00:00 UTC')}
     logger INFO
         {'_path': 'not/existing/bar',
-       'creation_date': DateTime('2010/10/10 00:00:00 GMT+2'),
-       'modification_date': DateTime('2012/12/12 00:00:00 GMT+1')}
+       'creation_date': DateTime('2010/10/10 00:00:00 UTC'),
+       'modification_date': DateTime('2011/11/11 00:00:00 UTC')}
     logger INFO
-        {'creation_date': DateTime('2010/10/10 00:00:00 GMT+2'),
-       'modification_date': DateTime('2012/12/12 00:00:00 GMT+1')}
+        {'creation_date': DateTime('2010/10/10 00:00:00 UTC'),
+       'modification_date': DateTime('2011/11/11 00:00:00 UTC')}
 
 
 That was changed on the object::
 
     >>> pprint.pprint(plone.updated)
-    [('spam/eggs/foo', 'creation_date', DateTime('2010/10/10 00:00:00 GMT+2')),
-     ('spam/eggs/foo', 'modification_date', DateTime('2012/12/12 00:00:00 GMT+1')),
-     ('spam/eggs/bar', 'creation_date', DateTime('2010/10/10 00:00:00 GMT+2')),
-     ('spam/eggs/baz', 'modification_date', DateTime('2012/12/12 00:00:00 GMT+1'))]
+    [('spam/eggs/foo', 'creation_date', DateTime('2010/10/10 00:00:00 UTC')),
+     ('spam/eggs/foo', 'modification_date', DateTime('2011/11/11 00:00:00 UTC')),
+     ('spam/eggs/bar', 'creation_date', DateTime('2010/10/10 00:00:00 UTC')),
+     ('spam/eggs/baz', 'modification_date', DateTime('2011/11/11 00:00:00 UTC'))]
 
