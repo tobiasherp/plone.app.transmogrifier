@@ -1,6 +1,8 @@
 *.egg-info
 *.mo
 *.pyc
+*~
+.*.swp
 .installed.cfg
 .mr.developer.cfg
 compiled-doc.rst
@@ -10,3 +12,4 @@ dist/
 eggs/
 parts/
 var/
+
