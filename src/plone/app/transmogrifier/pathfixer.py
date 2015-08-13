@@ -23,6 +23,7 @@ class PathFixer(object):
         """
         self.previous = previous
         self.context = transmogrifier.context
+        self.count = transmogrifier.create_itemcounter(name)
 
         if 'path-key' in options:
             pathkeys = options['path-key'].splitlines()
@@ -40,7 +41,9 @@ class PathFixer(object):
 
     def __iter__(self):
 
+        count = self.count
         for item in self.previous:
+            count('got')
 
             pathkey = self.pathkey(*item.keys())[0]
             stripstring = self.stripstring
@@ -48,6 +51,7 @@ class PathFixer(object):
 
             if not pathkey or not (stripstring or prependstring):
                 # not enough info or nothing to do
+                count('unchanged')
                 yield item
                 continue
 
@@ -55,9 +59,12 @@ class PathFixer(object):
 
             if stripstring and path.startswith(stripstring):
                 path = path[len(stripstring):]
+                count('stripped')
             if prependstring:
                 path = '%s%s' % (prependstring, path)
+                count('prefixed')
 
             item[pathkey] = path
 
+            count('forwarded')
             yield item

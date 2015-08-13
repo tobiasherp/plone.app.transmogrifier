@@ -17,6 +17,7 @@ class UIDUpdaterSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
+        self.count = transmogrifier.create_itemcounter(name)
 
         if 'path-key' in options:
             pathkeys = options['path-key'].splitlines()
@@ -32,12 +33,15 @@ class UIDUpdaterSection(object):
 
     def __iter__(self):
 
+        count = self.count
         for item in self.previous:
+            count('got')
 
             pathkey = self.pathkey(*item.keys())[0]
             uidkey = self.uidkey(*item.keys())[0]
 
             if not pathkey or not uidkey:  # not enough info
+                count('forwarded')
                 yield item
                 continue
 
@@ -46,9 +50,11 @@ class UIDUpdaterSection(object):
 
             obj = traverse(self.context, str(path).lstrip('/'), None)
             if obj is None:  # path doesn't exist
+                count('forwarded')
                 yield item
                 continue
 
+            changed = False
             if IReferenceable.providedBy(obj):
                 oldUID = obj.UID()
                 if oldUID != uid:
@@ -56,8 +62,13 @@ class UIDUpdaterSection(object):
                         setattr(obj, UUID_ATTR, uid)
                     else:
                         obj._setUID(uid)
+                    changed = True
 
             if IAttributeUUID.providedBy(obj):
                 IMutableUUID(obj).set(uid)
+                changed = True
 
+            if changed:
+                count('changed')
+            count('forwarded')
             yield item
