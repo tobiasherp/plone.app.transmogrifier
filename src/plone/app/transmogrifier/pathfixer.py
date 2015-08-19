@@ -2,6 +2,7 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import Matcher
 from collective.transmogrifier.utils import defaultKeys
+from collective.transmogrifier.utils import make_itemInfo
 from zope.interface import classProvides
 from zope.interface import implements
 
@@ -24,6 +25,7 @@ class PathFixer(object):
         self.previous = previous
         self.context = transmogrifier.context
         self.count = transmogrifier.create_itemcounter(name)
+        self.name = name
 
         if 'path-key' in options:
             pathkeys = options['path-key'].splitlines()
@@ -42,8 +44,10 @@ class PathFixer(object):
     def __iter__(self):
 
         count = self.count
+        itemInfo = make_itemInfo(self.name)
         for item in self.previous:
             count('got')
+            itemInfo(item)
 
             pathkey = self.pathkey(*item.keys())[0]
             stripstring = self.stripstring
@@ -65,6 +69,7 @@ class PathFixer(object):
                 count('prefixed')
 
             item[pathkey] = path
+            itemInfo(item, showone='changed')
 
             count('forwarded')
             yield item
